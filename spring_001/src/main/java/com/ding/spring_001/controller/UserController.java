@@ -1,9 +1,11 @@
 package com.ding.spring_001.controller;
 
+import com.ding.spring_001.common.Result;
 import com.ding.spring_001.entity.User;
 import com.ding.spring_001.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
@@ -17,9 +19,9 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @RequestMapping("/selectAll")
-    public  List<User> selectAll() {
+    @GetMapping("/selectAll")
+    public Result selectAll() {
         List<User> users = userService.selectAll();
-        return users;
+        return Result.success(users);
     }
 }
