@@ -12,11 +12,27 @@ public class UserServiceImpl implements UserService {
 
     //调用持久层的接口,执行sql
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
 
+    // 查询所有用户信息
     @Override
     public List<User> selectAll() {
         List<User> list = userMapper.selectAll();
         return list;
+    }
+
+    // 根据用户名和电话查询用户信息
+    @Override
+    public List<User> selectByUserNameAndPhone(String name, String phone) {
+        List<User> list = userMapper.selectByUserNameAndPhone(name, phone);
+        return list;
+    }
+
+
+    // 添加用户信息
+    @Override
+    public int add(User user) {
+        int i = userMapper.add(user);
+        return i;
     }
 }

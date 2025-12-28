@@ -6,6 +6,8 @@ import com.ding.spring_001.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
@@ -19,9 +21,27 @@ public class UserController {
     @Autowired
     UserService userService;
 
+
+    /* 查询所有用户信息 */
     @GetMapping("/selectAll")
     public Result selectAll() {
         List<User> users = userService.selectAll();
         return Result.success(users);
+    }
+
+    /* 根据用户名和电话查询用户信息 */
+    @GetMapping("/selectByUserNameAndPhone")
+    public Result selectByUserNameAndPhone(String name, String phone) {
+        List<User> list = userService.selectByUserNameAndPhone(name, phone);
+        return Result.success(list);
+    }
+
+    /*添加用户信息 */
+    @PostMapping("/add")
+    public Result add(@RequestBody User user) {
+        int i = userService.add(user);
+        if (i == 1)
+            return Result.success();
+        return Result.error("添加失败");
     }
 }

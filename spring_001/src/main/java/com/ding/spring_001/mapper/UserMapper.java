@@ -6,4 +6,10 @@ import java.util.List;
 
 public interface UserMapper {
     List<User> selectAll();
+
+
+    List<User> selectByUserNameAndPhone(String name, String phone);
+
+
+    int add(User user);
 }

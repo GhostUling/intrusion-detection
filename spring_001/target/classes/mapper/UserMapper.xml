@@ -4,7 +4,30 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--namespace命名空间: 要和mapper持久层层的接口全限定名相同-->
 <mapper namespace="com.ding.spring_001.mapper.UserMapper">
+
+    <insert id='add'>
+         insert into user(name,username,password,email,intro,phone,create_time,update_time,type)
+        VALUES(#{name},#{username},#{password},#{email},#{intro},#{phone},#{create_time},#{update_time},#{type})
+    </insert>
+
+
     <select id="selectAll" resultType="user">
         select * from user
     </select>
+
+
+    <select id="selectByUserNameAndPhone" resultType="user">
+        select * from user 
+        <where>
+            <if test="name != null and name != ''">
+                name like concat('%', #{name}, '%')
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone like concat('%', #{phone}, '%')
+            </if>
+        </where> 
+    </select>
+
+
+
 </mapper>
