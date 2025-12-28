@@ -19,4 +19,10 @@ public interface UserService {
 
 
     int add(User user);
+
+
+    int del(Integer id);
+
+
+    int deleteBatch(int[] ids);
 }

@@ -44,4 +44,20 @@ public class UserServiceImpl implements UserService {
         int i = userMapper.add(user);
         return i;
     }
+
+
+    // 删除用户信息
+    @Override
+    public int del(Integer id) {
+        int i = userMapper.del(id);
+        return i;
+    }
+
+    
+    // 批量删除用户信息
+    @Override
+    public int deleteBatch(int[] ids) {
+        int i = userMapper.deleteBatch(ids);
+        return i;
+    }
 }

@@ -6,7 +6,9 @@ import com.ding.spring_001.service.UserService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,5 +46,23 @@ public class UserController {
         if (i == 1)
             return Result.success();
         return Result.error("添加失败");
+    }
+
+    /*单独删除 */
+    @DeleteMapping("/del/{id}")
+    public Result del(@PathVariable Integer id) {
+        Integer i = userService.del(id);
+        if (i != 1)
+            return Result.error("删除失败");
+        return Result.success();
+    }
+
+    /*批量删除 */
+    @DeleteMapping("/dels/{ids}")
+    public Result deleteBatch(@PathVariable int[] ids) {
+        int i = userService.deleteBatch(ids);
+        if (i > 0)
+            return Result.success();
+        return Result.error("批量删除失败");
     }
 }

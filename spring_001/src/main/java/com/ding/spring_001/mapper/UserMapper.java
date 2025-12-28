@@ -12,4 +12,10 @@ public interface UserMapper {
 
 
     int add(User user);
+
+
+    int del(Integer id);
+    
+
+    int deleteBatch(int[] ids);
 }
