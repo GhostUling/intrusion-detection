@@ -1,10 +1,15 @@
 package com.ding.spring_001.controller;
 
+import com.ding.spring_001.entity.User;
+import com.ding.spring_001.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 //告诉SpringBoot当前类是一个控制器，可以接收前端请求。交给Spring容器管理
+@CrossOrigin//该注解解决跨域问题
 @RestController//默认返回时会经过视图解析器
 @RequestMapping("/user")
 public class UserController {
