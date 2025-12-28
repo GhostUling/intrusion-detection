@@ -25,4 +25,7 @@ public interface UserService {
 
 
     int deleteBatch(int[] ids);
+
+    
+    int update(User user);
 }

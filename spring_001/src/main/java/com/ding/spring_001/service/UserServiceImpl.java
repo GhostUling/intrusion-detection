@@ -60,4 +60,12 @@ public class UserServiceImpl implements UserService {
         int i = userMapper.deleteBatch(ids);
         return i;
     }
+
+
+    // 修改用户信息
+    @Override
+    public int update(User user) {
+        int i = userMapper.update(user);
+        return i;
+    }
 }

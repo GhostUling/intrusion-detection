@@ -65,4 +65,14 @@ public class UserController {
             return Result.success();
         return Result.error("批量删除失败");
     }
+
+    /*修改用户信息 */
+    @PostMapping("/update")
+    public Result update(@RequestBody User user) {
+        System.out.println(user);
+        int i = userService.update(user);
+        if (i >= 0)
+            return Result.success();
+        return Result.error("修改失败");
+    }
 }

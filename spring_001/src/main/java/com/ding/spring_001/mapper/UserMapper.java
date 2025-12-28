@@ -18,4 +18,7 @@ public interface UserMapper {
     
 
     int deleteBatch(int[] ids);
+
+
+    int update(User user);
 }

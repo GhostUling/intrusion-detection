@@ -42,7 +42,13 @@
     </select>
 
 
-    
-
-
+    <update id="update">
+        update user set username = #{username}, 
+                        name = #{name},
+                        password = #{password}, 
+                        email = #{email}, 
+                        phone = #{phone}, 
+                        type = #{type}
+        where id = #{id}
+    </update>
 </mapper>
