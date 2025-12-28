@@ -22,3 +22,12 @@ mybatis:
 logging:
   level:
     com.ding.spring_001.mapper: debug
+
+#配置PageHelper分页插件
+page-helper:
+  # 指定使用的数据库方言
+  dialect: mysql
+  # 控制分页逻辑。当设置为 true 时，如果请求的页码大于总页数，系统将返回空结果，而不是报错或返回不合理的数据
+  reasonable: true
+  #允许在查询方法中直接传递分页参数
+  support-methods-arguments: true
