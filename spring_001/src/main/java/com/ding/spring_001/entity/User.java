@@ -37,15 +37,21 @@ public class User {
     private String intro;
 
     // 根据你的数据库表，还需要添加以下字段：
+    //手机号
     @Column(name = "phone")
     private String phone;
 
+    //创建时间
     @Column(name = "create_time")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
+    //更新时间
     @Column(name = "update_time")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
+    //用户类型
     @Column(name = "type")
     private String type;
 
