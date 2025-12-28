@@ -3,7 +3,7 @@
   <div class="user-page">
     <div class="user">
       <el-input class="user-input" placeholder="请输入姓名" v-model="name" clearable></el-input>
-      <el-input class="user-input" placeholder="请输入电话·" v-model="photo" clearable></el-input>
+      <el-input class="user-input" placeholder="请输入电话·" v-model="phone" clearable></el-input>
       <el-button class="user-btn" type="success" @click="search">搜索</el-button>
       <el-button type="primary">添加</el-button>
       <el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
@@ -48,10 +48,10 @@ export default {
   data() {
     return {
       name:'',
-      photo:'',
+      phone:'',
       pageNum:1,
       pageSize:5,
-      total:'',
+      total:8,
       /* 定义一个数组用于存放表格的数据 */
       tableData: []
     };
@@ -63,12 +63,12 @@ export default {
       //发送查询请求访问后端
       let param1={
         name:this.name,
-        photo:this.photo,
+        phone:this.phone,
         pageNum:this.pageNum,
         pageSize:this.pageSize,
         
       }
-      request.get('/user/selectByUserNameAndPhoto',{params:param1}).then(res=>{
+      request.get('/user/selectByUserNameAndPhone',{params:param1}).then(res=>{
         //console.log(res);
         if(res.code=='0'){
           this.tableData=res.data.list

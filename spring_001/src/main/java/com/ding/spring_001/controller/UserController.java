@@ -3,6 +3,7 @@ package com.ding.spring_001.controller;
 import com.ding.spring_001.common.Result;
 import com.ding.spring_001.entity.User;
 import com.ding.spring_001.service.UserService;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,15 +25,15 @@ public class UserController {
 
     /* 查询所有用户信息 */
     @GetMapping("/selectAll")
-    public Result selectAll() {
-        List<User> users = userService.selectAll();
+    public Result selectAll(User user) {
+        PageInfo<User> users = userService.selectAll(user);
         return Result.success(users);
     }
 
     /* 根据用户名和电话查询用户信息 */
     @GetMapping("/selectByUserNameAndPhone")
-    public Result selectByUserNameAndPhone(String name, String phone) {
-        List<User> list = userService.selectByUserNameAndPhone(name, phone);
+    public Result selectByUserNameAndPhone(User user) {
+        PageInfo<User> list = userService.selectByUserNameAndPhone(user);
         return Result.success(list);
     }
 

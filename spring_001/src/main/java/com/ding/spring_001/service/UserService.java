@@ -6,14 +6,15 @@ import com.ding.spring_001.entity.User;
 
 import java.util.List;
 
+import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 
 public interface UserService {
 
-    List<User> selectAll();
+    PageInfo<User> selectAll(User user);
 
 
-    List<User> selectByUserNameAndPhone(@Param("name") String name, @Param("phone") String phone);
+    PageInfo<User> selectByUserNameAndPhone(User user);
     // 多个参数需要使用Param注解进行标注
 
 

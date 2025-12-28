@@ -48,4 +48,7 @@ public class User {
 
     @Column(name = "type")
     private String type;
+
+    private Integer pageNum=1;
+    private Integer pageSize=5;
 }

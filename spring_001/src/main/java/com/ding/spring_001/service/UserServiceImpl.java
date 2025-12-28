@@ -2,6 +2,8 @@ package com.ding.spring_001.service;
 
 import com.ding.spring_001.entity.User;
 import com.ding.spring_001.mapper.UserMapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +18,23 @@ public class UserServiceImpl implements UserService {
 
     // 查询所有用户信息
     @Override
-    public List<User> selectAll() {
-        List<User> list = userMapper.selectAll();
-        return list;
+    public PageInfo<User> selectAll(User user) {
+        //开启分页
+        Integer pageNum=user.getPageNum();
+        Integer pageSize = user.getPageSize();
+        PageHelper.startPage(pageNum,pageSize);
+        List<User> users = userMapper.selectAll();
+        PageInfo<User> userPageInfo=new PageInfo<>(users);
+        return userPageInfo;
     }
 
     // 根据用户名和电话查询用户信息
     @Override
-    public List<User> selectByUserNameAndPhone(String name, String phone) {
-        List<User> list = userMapper.selectByUserNameAndPhone(name, phone);
-        return list;
+    public PageInfo<User> selectByUserNameAndPhone(User user) {
+        PageHelper.startPage(user.getPageNum(),user.getPageSize());
+        List<User> list = userMapper.selectByUserNameAndPhone(user.getName(),user.getPhone());
+        PageInfo<User> userPageInfo=new PageInfo<>(list);
+        return userPageInfo;
     }
 
 
