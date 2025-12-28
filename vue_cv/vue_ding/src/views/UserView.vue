@@ -50,7 +50,7 @@ export default {
         user_name:this.user_name,
         address:this.address
       }
-      request.get('/user/selectAll',param).then(res=>{
+      request.get('/user/selectAll',{param}).then(res=>{
         console.log(res);
       })
     },
