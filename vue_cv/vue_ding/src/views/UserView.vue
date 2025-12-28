@@ -2,14 +2,17 @@
   <!-- 添加一个最外层的div -->
   <div class="user-page">
     <div class="user">
-      <el-input class="user-input" placeholder="请输入姓名" v-model="user_name" clearable></el-input>
-      <el-input class="user-input" placeholder="请输入地址" v-model="address" clearable></el-input>
+      <el-input class="user-input" placeholder="请输入姓名" v-model="name" clearable></el-input>
+      <el-input class="user-input" placeholder="请输入电话·" v-model="photo" clearable></el-input>
       <el-button class="user-btn" type="success" @click="search">搜索</el-button>
       <el-button type="primary">添加</el-button>
       <el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
-        <el-table-column prop="date" label="日期" width="180"></el-table-column>
+
+        <el-table-column prop="id" label="序号" width="180"></el-table-column>
         <el-table-column prop="name" label="姓名" width="180"></el-table-column>
-        <el-table-column prop="address" label="地址"></el-table-column>
+        <el-table-column prop="email" label="邮箱"></el-table-column>
+        <el-table-column prop="create_time" label="创建日期" width="180"></el-table-column>
+
         <el-table-column label="操作">
           <!-- 这里也需要修复操作列 -->
           <template slot-scope="scope">
@@ -24,11 +27,11 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="1"
+        :current-page="pageNum"
         :page-sizes="[5,10,20,50]"
-        :page-size="10"
+        :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper" 
-        :total="400">
+        :total="total">
       </el-pagination>
     </div>
   </div>
@@ -40,18 +43,37 @@ export default {
   // 修正1：将 mounted:{} 改为正确的生命周期钩子
   mounted() {
     // 这里可以添加组件挂载后的初始化逻辑
+    this.search()
+  },
+  data() {
+    return {
+      name:'',
+      photo:'',
+      pageNum:1,
+      pageSize:5,
+      total:'',
+      /* 定义一个数组用于存放表格的数据 */
+      tableData: []
+    };
   },
   methods: {
     /*查询请求方法*/
     search(){
       //alert("点击了查询按钮");
       //发送查询请求访问后端
-      let param={
-        user_name:this.user_name,
-        address:this.address
+      let param1={
+        name:this.name,
+        photo:this.photo,
+        pageNum:this.pageNum,
+        pageSize:this.pageSize,
+        
       }
-      request.get('/user/selectAll',{param}).then(res=>{
-        console.log(res);
+      request.get('/user/selectByUserNameAndPhoto',{params:param1}).then(res=>{
+        //console.log(res);
+        if(res.code=='0'){
+          this.tableData=res.data.list
+          this.total=res.data.total
+        }
       })
     },
     /*修改方法*/
@@ -72,41 +94,17 @@ export default {
       return "";
     },//对应的方法
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      //console.log(`每页 ${val} 条`);
+      this.pageSize=val
+      this.search()
     },
     handleCurrentChange(val){
-      console.log(`当前页 ${val}`);
+      //console.log(`当前页 ${val}`);
+      this.pageNum=val
+      this.search()
     },
   },
-  data() {
-    return {
-      user_name:'',
-      address:'',
-      /* 定义一个数组用于存放表格的数据 */
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-      ],
-    };
-  },
+  
 };
 </script>
 
