@@ -51,7 +51,7 @@ export default {
       phone:'',
       pageNum:1,
       pageSize:5,
-      total:8,
+      total:'',
       /* 定义一个数组用于存放表格的数据 */
       tableData: []
     };
