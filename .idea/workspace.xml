@@ -4,11 +4,33 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="83b99baa-0119-43c8-bda9-e680a0bd889a" name="更改" comment="" />
+    <list default="true" id="83b99baa-0119-43c8-bda9-e680a0bd889a" name="更改" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/Spring001Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/Spring001Application.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/common/Result.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/common/Result.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/config/PageHelperConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/config/PageHelperConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/controller/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/entity/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/entity/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/mapper/UserMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/mapper/UserMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/service/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/service/UserServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/service/UserServiceImpl.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -36,16 +58,24 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.Spring001Application.executor": "Run",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/rjxm/intrusion-detection",
-    "project.structure.last.edited": "SDK",
+    "project.structure.last.edited": "项目",
     "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "MavenSettings"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.ding.spring_001.entity" />
+      <recent name="com.ding.spring_001.mapper" />
+      <recent name="com.ding.spring_001.service.impl" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
