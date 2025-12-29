@@ -7,7 +7,7 @@
 
     <insert id='add'>
          insert into user(name,username,password,email,intro,phone,create_time,update_time,type)
-        VALUES(#{name},#{username},#{password},#{email},#{intro},#{phone},now(),#{updateTime},#{type})
+        VALUES(#{name},#{username},#{password},#{email},#{intro},#{phone},now(),#{update_time},#{type})
     </insert>
 
 

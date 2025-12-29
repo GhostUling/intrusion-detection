@@ -45,12 +45,12 @@ public class User {
     //创建时间
     @Column(name = "create_time")
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
+    private Date create_time;
 
     //更新时间
     @Column(name = "update_time")
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date updateTime;
+    private Date update_time;
 
     //用户类型
     @Column(name = "type")

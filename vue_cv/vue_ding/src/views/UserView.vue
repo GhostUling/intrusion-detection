@@ -107,9 +107,8 @@ export default {
         phone:this.phone,
         pageNum:this.pageNum,
         pageSize:this.pageSize,
-        
       }
-      request.get('/user/selectByUserNameAndPhone',{params:param1}).then(res=>{
+      request.get('/user/selectByUserNameAndPhone', { params: param1 }).then(res => {
         //console.log(res);
         if(res.code=='0'){
           this.tableData=res.data.list
