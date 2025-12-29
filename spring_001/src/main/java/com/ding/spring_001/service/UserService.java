@@ -15,7 +15,7 @@ public interface UserService {
 
 
     PageInfo<User> selectByUserNameAndPhone(User user);
-    // ���������Ҫʹ��Paramע����б�ע
+    // 多个参数需要使用Param注解进行标注
 
 
     int add(User user);
@@ -29,7 +29,9 @@ public interface UserService {
     
     int update(User user);
 
+
     User selectByUserNameAndPass(User user);
 
+    
     User findById(Integer integer);
 }
