@@ -21,4 +21,6 @@ public interface UserMapper {
 
 
     int update(User user);
+
+    User selectByUserNameAndPass(User user);
 }
