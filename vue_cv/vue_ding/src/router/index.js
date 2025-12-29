@@ -5,6 +5,7 @@ import UserView from '../views/UserView.vue'
 import LoginView from '../views/LoginView.vue'
 import LayoutView from '../views/LayoutView.vue'
 import BookView from '../views/BookView.vue'
+import BmlView from '../views/BmlView.vue'
 
 Vue.use(VueRouter)
 
@@ -35,18 +36,14 @@ const routes = [
             component: BookView
           },
           {
-            path: '/about',
-            name: 'about',
-            // route level code-splitting
-            // this generates a separate chunk (about.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
-            component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-          },
-    ]
-  },
-  
-  
+            path: '/bml',
+            name: 'bml',
+            component: BmlView
+          }
+        ]
+  }
 ]
+
 
 
 const router = new VueRouter({

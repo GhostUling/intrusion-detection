@@ -5,7 +5,7 @@
 
         <img src="@/assets/logo.png" style="width: 60px; height: 60px; position:absolute;left:10px;top:10px;">
         <!--   font-size: 18px    字体大小 -->
-        <span style=" position:absolute;left:80px;top:30px;font-size: 18px;">Vue管理系统</span>
+        <span style=" position:absolute;left:80px;top:30px;font-size: 18px;">入侵检测管理系统</span>
 
         <!-- 退出登录组件 -->
         <el-dropdown trigger="click" style="color: white; font-size: 16px; float: right; height:60px; line-height:60px">
@@ -29,23 +29,19 @@
               <i class="el-icon-menu"></i>
               <span slot="title">系统首页</span>
             </el-menu-item>
-            <el-submenu index="2" v-if="user.type != 'role_student'">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span>用户管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="/about">管理员信息</el-menu-item>
-                <el-menu-item index="/user">用户信息</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
+
+            <el-menu-item index="/user" v-if="user.type != 'role_student'">
+              <i class="el-icon-s-custom"></i>
+              <span slot="title">用户信息</span>
+            </el-menu-item>
+            
             <el-submenu index="3">
               <template slot="title">
-                <i class="el-icon-setting"></i>
-                <span>文件管理</span>
+                <i class="el-icon-picture"></i>
+                <span>图片管理</span>
               </template>
               <el-menu-item-group>
-                <el-menu-item index="">图片文件</el-menu-item>
+                <el-menu-item index="/bml">图片文件</el-menu-item>
                 <el-menu-item index="/book">图书管理</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
