@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ImageMapper{
     List<Image> selectAll();
-    List<Image> findBySearch(@Param("params") Params params);
+    List<Image> findById(@Param("userid") Integer userid);
 }

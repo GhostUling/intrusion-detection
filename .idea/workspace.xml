@@ -5,19 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="83b99baa-0119-43c8-bda9-e680a0bd889a" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/Spring001Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/Spring001Application.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/common/Result.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/common/Result.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/config/PageHelperConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/config/PageHelperConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/controller/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/src/main/java/com/ding/spring_001/controller/BookController.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/src/main/java/com/ding/spring_001/controller/ImageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/src/main/java/com/ding/spring_001/entity/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/src/main/java/com/ding/spring_001/entity/Image.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/src/main/java/com/ding/spring_001/mapper/BookMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/src/main/java/com/ding/spring_001/mapper/ImageMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/src/main/java/com/ding/spring_001/service/BookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/src/main/java/com/ding/spring_001/service/ImageService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/src/main/java/com/ding/spring_001/service/impl/BookServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/src/main/java/com/ding/spring_001/service/impl/ImageServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/src/main/resources/mapper/BookMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/src/main/resources/mapper/ImageMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/controller/ImageController.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/controller/ImageController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/entity/Image.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/entity/Image.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/entity/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/entity/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/mapper/UserMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/mapper/UserMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/mapper/ImageMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/mapper/ImageMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/service/ImageService.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/service/ImageService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/service/UserService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/service/UserServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/service/UserServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/service/impl/ImageServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/spring_001/target/classes/com/ding/spring_001/service/impl/ImageServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring_001/target/classes/mapper/BookMapper.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue_cv/vue_ding/src/views/BookView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue_cv/vue_ding/src/views/BookView.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +69,7 @@
     "project.structure.last.edited": "项目",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "MavenSettings"
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
   <component name="RecentsManager">

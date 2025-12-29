@@ -26,11 +26,15 @@ public class ImageController {
         PageInfo<Image> ImagePageInfo = ImageService.findBySearch(params);
         return Result.success(ImagePageInfo);
     }*/
-   @GetMapping("/search")
-   public Result findBySearch(Params params) {
-       PageInfo<Image> ImagePageInfo = ImageService.findBySearch(params);
-       return Result.success(ImagePageInfo);
-   }
+
+    @GetMapping("/userid")
+    public Result findById(Integer userid) {
+        // 调用 ImageService 的 findBySearch 方法获取分页信息
+        List<Image> images = ImageService.findById(userid);
+        // 将分页信息封装到 Result 中并返回
+        return Result.success(images);
+    }
+
     @PostMapping("/add")
     public Result save(@RequestBody Image Image) {
         if(Image.getId() == null){

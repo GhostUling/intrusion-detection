@@ -26,10 +26,11 @@ public class ImageServiceImpl implements ImageService {
         return PageInfo.of(params);
     }*/
     @Override
-    public PageInfo<Image> findBySearch(Params params) {
-        PageHelper.startPage(params.getPageNum(), params.getPageSize());
-        List<Image> Images = ImageMapper.findBySearch(params);
-        return new PageInfo<>(Images);
+    public List<Image> findById(Integer userid) {
+//        PageHelper.startPage(params.getPageNum(), params.getPageSize());
+        List<Image> Images = ImageMapper.findById(userid);
+        return Images;
+//        return new PageInfo<>(Images);
     }
 
     public void add(Image Image) {

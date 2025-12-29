@@ -3,20 +3,18 @@ package com.ding.spring_001.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Image {
+public class Image implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     //主键id
     private Integer id;
-    //图书名称
-    private String name;
-    //图书价格
-    private String price;
-    //作者
-    private String author;
-    //出版社
-    private String press;
+    //用户id
+    private Integer userid;
+    //图片数据或路径
     private String img;
 }

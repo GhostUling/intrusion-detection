@@ -140,7 +140,7 @@ export default {
 
     //用户输入信息点击查询按钮调用方法
     search() {
-      request.get("/book/selectAll", { params: this.params }).then(res => {
+      request.get("/Image/userid", { params: this.params }).then(res => {
         if (res.code === '0') {
           this.tableData = res.data
           this.total = res.data
