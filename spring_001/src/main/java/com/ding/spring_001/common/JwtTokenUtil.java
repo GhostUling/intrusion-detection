@@ -44,7 +44,7 @@ public class JwtTokenUtil {
     public static String getToken(String userId, String password) {
         return JWT.create()
                 .withAudience(userId) //通过userId创建token,作为载荷
-                .withExpiresAt(DateUtil.offsetHour(new Date(), 2))//（过期时间）2小时过期
+                .withExpiresAt(DateUtil.offsetHour(new Date(), 2000))//（过期时间）2小时过期
                 .sign(Algorithm.HMAC512(password)); //以password作为token的密钥
     }
 

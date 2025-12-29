@@ -48,7 +48,7 @@
     </select>
 
 
-    <select id="fineById" resultType="user">
+    <select id="findById" resultType="user">
         select * from user where id = #{id}
     </select>
 
