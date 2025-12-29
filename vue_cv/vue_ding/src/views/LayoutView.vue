@@ -45,7 +45,7 @@
                 <span>文件管理</span>
               </template>
               <el-menu-item-group>
-                <el-menu-item index="">图片文件</el-menu-item>
+                <el-menu-item index="/bml">图片文件</el-menu-item>
                 <el-menu-item index="/book">图书管理</el-menu-item>
               </el-menu-item-group>
             </el-submenu>

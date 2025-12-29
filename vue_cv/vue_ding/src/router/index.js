@@ -5,6 +5,7 @@ import UserView from '../views/UserView.vue'
 import LoginView from '../views/LoginView.vue'
 import LayoutView from '../views/LayoutView.vue'
 import BookView from '../views/BookView.vue'
+import BmlView from '../views/BmlView.vue'
 
 Vue.use(VueRouter)
 
@@ -33,6 +34,11 @@ const routes = [
             path: '/book',
             name: 'book',
             component: BookView
+          },
+          {
+            path: '/bml',
+            name: 'bml',
+            component: BmlView
           },
           {
             path: '/about',
