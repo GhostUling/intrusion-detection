@@ -30,4 +30,6 @@ public interface UserService {
     int update(User user);
 
     User selectByUserNameAndPass(User user);
+
+    User findById(Integer integer);
 }

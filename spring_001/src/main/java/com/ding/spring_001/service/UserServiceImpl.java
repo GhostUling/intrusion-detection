@@ -77,4 +77,9 @@ public class UserServiceImpl implements UserService {
         return dataSourceUser;
     }
 
+    @Override
+    public User findById(Integer integer) {
+        return userMapper.findById(id);
+    }
+
 }

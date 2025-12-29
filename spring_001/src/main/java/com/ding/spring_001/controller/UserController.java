@@ -25,9 +25,7 @@ public class UserController {
     UserService userService;
 
 
-    /**
-     * 用户登录
-     */
+    /* 用户登录 */
     @PostMapping("/login")
     public Result login(@RequestBody User user){
         User dataSourceUser = userService.selectByUserNameAndPass(user);
