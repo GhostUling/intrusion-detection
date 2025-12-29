@@ -68,4 +68,13 @@ public class UserServiceImpl implements UserService {
         int i = userMapper.update(user);
         return i;
     }
+
+
+    //根据登录信息查询用户信息  业务层方法
+    @Override
+    public User selectByUserNameAndPass(User user) {
+        User dataSourceUser = userMapper.selectByUserNameAndPass(user);
+        return dataSourceUser;
+    }
+
 }

@@ -15,7 +15,7 @@ public interface UserService {
 
 
     PageInfo<User> selectByUserNameAndPhone(User user);
-    // ¶à¸ö²ÎÊýÐèÒªÊ¹ÓÃParam×¢½â½øÐÐ±ê×¢
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÊ¹ï¿½ï¿½Param×¢ï¿½ï¿½ï¿½ï¿½Ð±ï¿½×¢
 
 
     int add(User user);
@@ -28,4 +28,6 @@ public interface UserService {
 
     
     int update(User user);
+
+    User selectByUserNameAndPass(User user);
 }

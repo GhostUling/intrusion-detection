@@ -25,6 +25,18 @@ public class UserController {
     UserService userService;
 
 
+    /**
+     * 用户登录
+     */
+    @PostMapping("/login")
+    public Result login(@RequestBody User user){
+        User dataSourceUser = userService.selectByUserNameAndPass(user);
+        if(dataSourceUser == null) {
+            return Result.error("请输入正确的用户名和密码");
+        }
+        return Result.success(dataSourceUser);
+    }
+
     /* 查询所有用户信息 */
     @GetMapping("/selectAll")
     public Result selectAll(User user) {
