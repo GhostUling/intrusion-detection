@@ -16,8 +16,10 @@
         <el-table-column label="操作">
           <!-- 这里也需要修复操作列 -->
           <template slot-scope="scope">
-            <el-button type="primary" @click="updateButton">修改</el-button>
-            <el-button type="danger" @click="deleteButton">删除</el-button>
+            <el-button style="margin-right: 10px;" type="primary" @click="updateButton(scope.row)">修改</el-button>
+            <el-popconfirm title="确定删除该条数据吗？" @confirm="deleteButton(scope.row.id)">
+              <el-button slot="reference" type="danger">删除</el-button>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -71,6 +73,7 @@
 
 <script>
 import request from '@/utils/request';
+import { search } from 'core-js/fn/symbol';
 export default {
   // 修正1：将 mounted:{} 改为正确的生命周期钩子
   mounted() {
@@ -123,32 +126,62 @@ export default {
     },
     /*确认添加方法*/
     confirmEdit() {
-      request.post('user/add',this.editForm).then(res=>{
-        if (res.code == '0')
-        {
-          this.$message({
+      if(this.editForm.id==null){
+        request.post('user/add',this.editForm).then(res=>{
+          if (res.code == '0')
+          {
+            this.$message({
             message: '添加成功',
             type: 'success'
-          });
-          this.dialogFormVisible = false;
-          this.search() // 添加成功后刷新表格数据
-        }
-        else
-        {
-          this.$message({
+            });
+            this.dialogFormVisible = false;
+            this.search() // 添加成功后刷新表格数据
+          }
+          else
+          {
+            this.$message({
             message: '添加失败',
             type: 'error'
-          });
-        }
-      })
+            });
+          }
+        })
+      }else{
+        request.post('user/update',this.editForm).then(res=>{
+          if (res.code == '0')
+          {
+            this.$message({
+            message: '添加成功',
+            type: 'success'
+            });
+            this.dialogFormVisible = false;
+            this.search() // 添加成功后刷新表格数据
+          }
+          else
+          {
+            this.$message({
+            message: '添加失败',
+            type: 'error'
+            });
+          }
+        })
+      }
+
     },
     /*修改方法*/
-    updateButton(){
-      console.log("点击了修改按钮");
+    updateButton(row){
+      //console.log("点击了修改按钮");
+      this.editForm=row;
+      this.dialogFormVisible = true;
     },
     /*删除方法*/
-    deleteButton(){
-      console.log("点击了删除按钮");
+    deleteButton(id){
+      //console.log("点击了删除按钮");
+      request.delete('/user/delete/'+id).then(res=>{
+        if(res.code=='0'){
+            this.$message.success("删除成功")
+            this.search()
+        }
+      })
     },
     /* 动态定义table表格的样式 */
     tableRowClassName({ row, rowIndex }) {
