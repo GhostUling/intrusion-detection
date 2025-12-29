@@ -10,6 +10,8 @@
       <el-button type="info" @click="clearInput()">清空</el-button>
       <el-button type="primary" @click="alertAddDialog()">添加</el-button>
     </div>
+    
+
     <div class="about">
       <!-- 引入elementUI的表格组件 -->
       <el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
@@ -23,7 +25,13 @@
         </el-table-column>
         <el-table-column prop="press" label="出版社" width="180">
         </el-table-column>
-        <el-table-column prop="img" label="图书封面" width="180">
+        <el-table-column label="图书封面" width="180">
+          <template v-slot="scope">
+            <el-image style="width: 100px; height: 100px" 
+              :src="'http://localhost:8080/api/files/' + scope.row.img" 
+              :preview-src-list="['http://localhost:8080/api/files/' + scope.row.img]">
+            </el-image>
+          </template>
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -56,6 +64,12 @@
           </el-form-item>
           <el-form-item label="出版社:" label-width="15%">
             <el-input v-model="form.press" autocomplete="off" style="width: 90%;"></el-input>
+          </el-form-item>
+          <!--上传文件-->
+          <el-form-item label="图书封面:" label-width="15%">
+            <el-upload  action="http://localhost:8080/api/files/upload" :on-success="successUpload">
+              <el-button size="small" type="primary">点击上传</el-button>
+            </el-upload>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -96,6 +110,9 @@ export default {
     this.search()
   },
   methods: {
+    successUpload(res){
+      this.form.img = res.data
+    },
     del(id){
       request.delete("/admin/del/"+id).then(res =>{
         if(res.code==='0'){
@@ -123,10 +140,10 @@ export default {
 
     //用户输入信息点击查询按钮调用方法
     search() {
-      request.get("/book/search", { params: this.params }).then(res => {
+      request.get("/book/selectAll", { params: this.params }).then(res => {
         if (res.code === '0') {
-          this.tableData = res.data.list
-          this.total = res.data.total
+          this.tableData = res.data
+          this.total = res.data
         } else {
           this.$message.error(res.msg)
         }
@@ -183,7 +200,7 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
 .el-table .warning-row {
   background: oldlace;
 }
