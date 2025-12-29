@@ -73,7 +73,7 @@
 
 <script>
 import request from '@/utils/request';
-import { search } from 'core-js/fn/symbol';
+//import { search } from 'core-js/fn/symbol';
 export default {
   // 修正1：将 mounted:{} 改为正确的生命周期钩子
   mounted() {
