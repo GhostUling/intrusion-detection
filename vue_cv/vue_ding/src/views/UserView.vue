@@ -4,8 +4,8 @@
     <div class="user">
       <el-input class="user-input" placeholder="请输入姓名" v-model="name" clearable></el-input>
       <el-input class="user-input" placeholder="请输入电话·" v-model="phone" clearable></el-input>
-      <el-button class="user-btn" type="success" @click="search">搜索</el-button>
-      <el-button type="primary">添加</el-button>
+      <el-button class="user-btn" type="primary" @click="search">搜索</el-button>
+      <el-button class="user-btn" type="primary" @click="add">添加</el-button>
       <el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
 
         <el-table-column prop="id" label="序号" width="180"></el-table-column>
@@ -23,6 +23,7 @@
       </el-table>
     </div>
     
+    <!-- 分页组件 -->
     <div class="block">
       <el-pagination
         @size-change="handleSizeChange"
@@ -34,6 +35,37 @@
         :total="total">
       </el-pagination>
     </div>
+
+    <!-- 添加按钮弹出输入框 -->
+    <el-dialog class="dialog-edit" title="添加用户" :visible.sync="dialogFormVisible" width="500px">
+          <el-form :model="editForm">
+            <el-form-item class="user-editInput" label="姓名：" :label-width="formLabelWidth">
+                <el-input v-model="editForm.name" autocomplete="off"></el-input>
+            </el-form-item>
+
+            <el-form-item class="user-editInput" label="用户名：" :label-width="formLabelWidth">
+                <el-input v-model="editForm.username" autocomplete="off"></el-input>
+            </el-form-item>
+
+            <el-form-item class="user-editInput" label="密码：" :label-width="formLabelWidth">
+                <el-input v-model="editForm.password" autocomplete="off"></el-input>
+            </el-form-item>
+
+            <el-form-item class="user-editInput" label="邮箱：" :label-width="formLabelWidth">
+                <el-input v-model="editForm.email" autocomplete="off"></el-input>
+            </el-form-item>
+
+            <el-form-item class="user-editInput" label="电话：" :label-width="formLabelWidth">
+                <el-input v-model="editForm.phone" autocomplete="off"></el-input>
+            </el-form-item>
+            
+
+          </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button class="user-btn" @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" class="user-btn" @click="confirmEdit()">确 定</el-button>
+            </div>
+        </el-dialog>
   </div>
 </template>
 
@@ -47,6 +79,15 @@ export default {
   },
   data() {
     return {
+      dialogFormVisible: false,
+      editForm: {
+        name: '',
+        username: '',
+        password: '',
+        email: '',
+        phone: '',
+      },
+      formLabelWidth: '80px',
       name:'',
       phone:'',
       pageNum:1,
@@ -73,6 +114,31 @@ export default {
         if(res.code=='0'){
           this.tableData=res.data.list
           this.total=res.data.total
+        }
+      })
+    },
+    /*点击添加,弹窗方法*/
+    add(){
+      this.dialogFormVisible = true;
+    },
+    /*确认添加方法*/
+    confirmEdit() {
+      request.post('user/add',this.editForm).then(res=>{
+        if (res.code == '0')
+        {
+          this.$message({
+            message: '添加成功',
+            type: 'success'
+          });
+          this.dialogFormVisible = false;
+          this.search() // 添加成功后刷新表格数据
+        }
+        else
+        {
+          this.$message({
+            message: '添加失败',
+            type: 'error'
+          });
         }
       })
     },
