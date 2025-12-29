@@ -42,11 +42,11 @@
             <el-submenu index="3">
               <template slot="title">
                 <i class="el-icon-setting"></i>
-                <span>信息管理</span>
+                <span>文件管理</span>
               </template>
               <el-menu-item-group>
-                <el-menu-item index="">学生信息</el-menu-item>
-                <el-menu-item index="">老师信息</el-menu-item>
+                <el-menu-item index="">图片文件</el-menu-item>
+                <el-menu-item index="/book">图书管理</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
           </el-menu>
