@@ -1,9 +1,9 @@
 package com.ding.spring_001.service.impl;
 
-import com.ding.spring_001.entity.Book;
+import com.ding.spring_001.entity.Image;
 import com.ding.spring_001.entity.Params;
-import com.ding.spring_001.mapper.BookMapper;
-import com.ding.spring_001.service.BookService;
+import com.ding.spring_001.mapper.ImageMapper;
+import com.ding.spring_001.service.ImageService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,30 +12,30 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class BookServiceImpl implements BookService {
+public class ImageServiceImpl implements ImageService {
     @Autowired
-    private BookMapper bookMapper;
+    private ImageMapper ImageMapper;
     @Override
-    public List<Book> selectAll() {
-        return bookMapper.selectAll();
+    public List<Image> selectAll() {
+        return ImageMapper.selectAll();
     }
 /*
     @Override
-    public PageInfo<Book> findBySearch(Params params) {
-        //return bookMapper.findBySearch(params);
+    public PageInfo<Image> findBySearch(Params params) {
+        //return ImageMapper.findBySearch(params);
         return PageInfo.of(params);
     }*/
     @Override
-    public PageInfo<Book> findBySearch(Params params) {
+    public PageInfo<Image> findBySearch(Params params) {
         PageHelper.startPage(params.getPageNum(), params.getPageSize());
-        List<Book> books = bookMapper.findBySearch(params);
-        return new PageInfo<>(books);
+        List<Image> Images = ImageMapper.findBySearch(params);
+        return new PageInfo<>(Images);
     }
 
-    public void add(Book book) {
+    public void add(Image Image) {
     }
 
-    public void update(Book book) {
+    public void update(Image Image) {
     }
 
     public void del(Integer id) {

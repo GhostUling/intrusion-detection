@@ -1,9 +1,9 @@
 package com.ding.spring_001.controller;
 
 import com.ding.spring_001.common.Result;
-import com.ding.spring_001.entity.Book;
+import com.ding.spring_001.entity.Image;
 import com.ding.spring_001.entity.Params;
-import com.ding.spring_001.service.BookService;
+import com.ding.spring_001.service.ImageService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,40 +11,40 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/book")
-public class BookController {
+@RequestMapping("/Image")
+public class ImageController {
     @Autowired
-    BookService bookService;
+    ImageService ImageService;
     //查询图书信息
     @GetMapping("/selectAll")
     public Result selectAll(){
-        List<Book> list=bookService.selectAll();
+        List<Image> list=ImageService.selectAll();
         return Result.success(list);
     }
    /* @GetMapping("/search")
     public Result findBySearch(Params params) {
-        PageInfo<Book> bookPageInfo = bookService.findBySearch(params);
-        return Result.success(bookPageInfo);
+        PageInfo<Image> ImagePageInfo = ImageService.findBySearch(params);
+        return Result.success(ImagePageInfo);
     }*/
    @GetMapping("/search")
    public Result findBySearch(Params params) {
-       PageInfo<Book> bookPageInfo = bookService.findBySearch(params);
-       return Result.success(bookPageInfo);
+       PageInfo<Image> ImagePageInfo = ImageService.findBySearch(params);
+       return Result.success(ImagePageInfo);
    }
     @PostMapping("/add")
-    public Result save(@RequestBody Book book) {
-        if(book.getId() == null){
-            bookService.add(book);
+    public Result save(@RequestBody Image Image) {
+        if(Image.getId() == null){
+            ImageService.add(Image);
         }
         else {
-            bookService.update(book);
+            ImageService.update(Image);
         }
         return Result.success();
     }
 
     @DeleteMapping("/del/{id}")
     public Result del(@PathVariable Integer id) {
-        bookService.del(id);
+        ImageService.del(id);
         return Result.success();
     }
 }
