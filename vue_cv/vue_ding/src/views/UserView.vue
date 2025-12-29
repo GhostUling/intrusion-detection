@@ -40,24 +40,24 @@
 
     <!-- 添加按钮弹出输入框 -->
     <el-dialog class="dialog-edit" title="添加用户" :visible.sync="dialogFormVisible" width="500px">
-          <el-form :model="editForm">
-            <el-form-item class="user-editInput" label="姓名：" :label-width="formLabelWidth">
+          <el-form :model="editForm" :rules="rules" ref="editForm">
+            <el-form-item prop="name" class="user-editInput" label="姓名：" :label-width="formLabelWidth">
                 <el-input v-model="editForm.name" autocomplete="off"></el-input>
             </el-form-item>
 
-            <el-form-item class="user-editInput" label="用户名：" :label-width="formLabelWidth">
+            <el-form-item prop="username" class="user-editInput" label="用户名：" :label-width="formLabelWidth">
                 <el-input v-model="editForm.username" autocomplete="off"></el-input>
             </el-form-item>
 
-            <el-form-item class="user-editInput" label="密码：" :label-width="formLabelWidth">
+            <el-form-item prop="password" class="user-editInput" label="密码：" :label-width="formLabelWidth">
                 <el-input v-model="editForm.password" autocomplete="off"></el-input>
             </el-form-item>
 
-            <el-form-item class="user-editInput" label="邮箱：" :label-width="formLabelWidth">
+            <el-form-item prop="email" class="user-editInput" label="邮箱：" :label-width="formLabelWidth">
                 <el-input v-model="editForm.email" autocomplete="off"></el-input>
             </el-form-item>
 
-            <el-form-item class="user-editInput" label="电话：" :label-width="formLabelWidth">
+            <el-form-item prop="phone" class="user-editInput" label="电话：" :label-width="formLabelWidth">
                 <el-input v-model="editForm.phone" autocomplete="off"></el-input>
             </el-form-item>
             
@@ -65,7 +65,7 @@
           </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button class="user-btn" @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" class="user-btn" @click="confirmEdit()">确 定</el-button>
+                <el-button type="primary" class="user-btn" @click="confirmEdit('editForm')">确 定</el-button>
             </div>
         </el-dialog>
   </div>
@@ -81,7 +81,54 @@ export default {
     this.search()
   },
   data() {
+
+    var validateEmail=(rule,value,callback)=>{
+        //需要通过正则表达式校验邮箱的格式
+        //定义正则表达式
+        const reg = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        //使用正则表达式校验输入的值,返回值为bool类型,如果满足则为true,否则为false
+        let flag = reg.test(value)
+        if (value === '') {
+            callback(new Error('邮箱不能为空'));
+        } else if (!flag) {
+            callback(new Error('请输入正确的邮箱'));
+        } else {
+            callback();
+        }
+    };
+    var validatePhone=(rule,value,callback)=>{
+        //定义校验手机号的正则表达式
+            const regTel = /^1[3-9]\d{9}$/;
+            let flag = regTel.test(value);
+            if (value === '') {
+                callback(new Error('手机号不能为空'));
+            } else if (!flag) {
+                callback(new Error('请输入正确的手机号'))
+            } else {
+                callback()
+            }
+    };
     return {
+
+      rules:{
+         name:[
+            {required:true,message:"姓名不能为空"}
+         ],
+         password:[
+            {required:true,message:"密码不能为空"}
+         ],
+         username:[
+            {required:true,message:"用户名不能为空"}
+         ],
+         email:[
+            {required:true,message:"邮箱不能为空"},
+            {validator:validateEmail,trigger:'blur'}
+         ],
+         phone:[
+            {required:true,message:"电话不能为空"},
+            {validator:validatePhone,trigger:'blur'}
+         ],
+      },
       dialogFormVisible: false,
       editForm: {
         name: '',
@@ -124,46 +171,39 @@ export default {
       this.dialogFormVisible = true;
     },
     /*确认添加方法*/
-    confirmEdit() {
-      if(this.editForm.id==null){
-        request.post('user/add',this.editForm).then(res=>{
-          if (res.code == '0')
-          {
-            this.$message({
-            message: '添加成功',
-            type: 'success'
-            });
-            this.dialogFormVisible = false;
-            this.search() // 添加成功后刷新表格数据
+    confirmEdit(editForm) {
+      this.$refs[editForm].validate((valid) => {
+          if(valid){
+            if(this.editForm.id==null){
+              request.post('user/add',this.editForm).then(res=>{
+                if (res.code == '0'){
+                  this.$message({message: '添加成功',type: 'success'});
+                  this.dialogFormVisible = false;
+                  this.search() // 添加成功后刷新表格数据
+                }
+                else
+                {
+                  this.$message({message: '添加失败',type: 'error'});
+                }
+              })
+            }else{
+              request.post('user/update',this.editForm).then(res=>{
+                if (res.code == '0'){
+                  this.$message({message: '添加成功',type: 'success'});
+                  this.dialogFormVisible = false;
+                  this.search() // 添加成功后刷新表格数据
+                }
+                else
+                {
+                  this.$message({message: '添加失败',type: 'error'});
+                }
+              })
+            }
+          }else{
+            this.$message.error("请输入正确的用户信息")
           }
-          else
-          {
-            this.$message({
-            message: '添加失败',
-            type: 'error'
-            });
-          }
-        })
-      }else{
-        request.post('user/update',this.editForm).then(res=>{
-          if (res.code == '0')
-          {
-            this.$message({
-            message: '添加成功',
-            type: 'success'
-            });
-            this.dialogFormVisible = false;
-            this.search() // 添加成功后刷新表格数据
-          }
-          else
-          {
-            this.$message({
-            message: '添加失败',
-            type: 'error'
-            });
-          }
-        })
-      }
+      })
+
 
     },
     /*修改方法*/
