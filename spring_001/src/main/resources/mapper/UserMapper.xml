@@ -41,6 +41,9 @@
         </where> 
         order by create_time desc
     </select>
+    <select id="selectByUserNameAndPhone" resultType="user">
+        select * from user where username = #{username} and password = #{password}
+    </select>
 
 
     <update id="update">
