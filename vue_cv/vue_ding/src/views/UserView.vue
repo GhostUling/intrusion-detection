@@ -163,6 +163,8 @@ export default {
         if(res.code=='0'){
           this.tableData=res.data.list
           this.total=res.data.total
+        }else{
+          this.$message.error(res.msg)
         }
       })
     },
