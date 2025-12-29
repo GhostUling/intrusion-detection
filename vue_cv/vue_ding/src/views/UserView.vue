@@ -175,7 +175,7 @@ export default {
     /*删除方法*/
     deleteButton(id){
       //console.log("点击了删除按钮");
-      request.delete('/user/delete/'+id).then(res=>{
+      request.delete('/user/del/'+id).then(res=>{
         if(res.code=='0'){
             this.$message.success("删除成功")
             this.search()

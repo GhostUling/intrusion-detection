@@ -48,6 +48,11 @@
     </select>
 
 
+    <select id="fineById" resultType="user">
+        select * from user where id = #{id}
+    </select>
+
+
     <update id="update">
         update user set username = #{username}, 
                         name = #{name},
