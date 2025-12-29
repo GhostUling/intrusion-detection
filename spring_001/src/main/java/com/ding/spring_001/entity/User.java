@@ -58,4 +58,6 @@ public class User {
 
     private Integer pageNum=1;
     private Integer pageSize=5;
+
+    private String token;
 }

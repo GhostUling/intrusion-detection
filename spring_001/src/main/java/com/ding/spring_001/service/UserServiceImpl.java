@@ -1,5 +1,6 @@
 package com.ding.spring_001.service;
 
+import com.ding.spring_001.common.JwtTokenUtil;
 import com.ding.spring_001.entity.User;
 import com.ding.spring_001.mapper.UserMapper;
 import com.github.pagehelper.PageHelper;
@@ -74,6 +75,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User selectByUserNameAndPass(User user) {
         User dataSourceUser = userMapper.selectByUserNameAndPass(user);
+        if(dataSourceUser != null){
+            String token = JwtTokenUtil.getToken(String.valueOf(user.getId()),user.getPassword());
+            dataSourceUser.setToken(token);
+        }
         return dataSourceUser;
     }
 

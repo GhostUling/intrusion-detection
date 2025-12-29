@@ -2,7 +2,7 @@ import axios from "axios";
 
 //创建一个axios对象
 const request = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: 'http://localhost:8080/api',
   //timeout: 5000
 })
 
@@ -11,6 +11,13 @@ const request = axios.create({
 比如统一加token，对请求参数统一加密 */
 request.interceptors.request.use(config => {
   config.headers['Content-Type'] = 'application/json;charset=utf-8';
+  //将token放入所有请求的请求头中
+  //先从浏览器本地存储中拿到登录成功时保存的用户信息
+  const user = localStorage.getItem("user")
+  //判断该登录信息是否为空
+  if(user){
+      config.headers['token'] = JSON.parse(user).token
+    }
   return config
 },error =>{
   return Promise.reject(error)
