@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
     public User selectByUserNameAndPass(User user) {
         User dataSourceUser = userMapper.selectByUserNameAndPass(user);
         if(dataSourceUser != null){
-            String token = JwtTokenUtil.getToken(String.valueOf(user.getId()),user.getPassword());
+            String token = JwtTokenUtil.getToken(String.valueOf(dataSourceUser.getId()),dataSourceUser.getPassword());
             dataSourceUser.setToken(token);
         }
         return dataSourceUser;
@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Integer id) {
-        return userMapper.findById(id);
+        return userMapper. findById(id);
     }
 
 }

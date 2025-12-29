@@ -2,6 +2,7 @@ package com.ding.spring_001.common;
 
 import cn.hutool.core.util.StrUtil;
 import com.ding.spring_001.entity.User;
+import com.ding.spring_001.exception.CustomException;
 import com.ding.spring_001.service.UserService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -37,7 +38,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         //2.判断token是否存在
         if (StrUtil.isBlank(token)) { //如果length为0
             System.out.println("登录失效,请重新登录");
-            //throw new CustomException("登录失效,请重新登录");
+            throw new CustomException("登录失效,请重新登录");
         }
         //3.获取token中的载荷=userid
         String userId;
@@ -53,11 +54,11 @@ public class JwtInterceptor implements HandlerInterceptor {
             String errMsg = "登录认证token失败,请重新登录";
             log.error(errMsg +",token="+token,e);
             System.out.println("登录认证token失败,请重新登录");
-            //throw new CustomException(errMsg);
+            throw new CustomException(errMsg);
         }
         if (user == null) {
             System.out.println("用户不存在");
-            //throw new CustomException("用户不存在");
+            throw new CustomException("用户不存在");
         }
         try {
             //通过密码签名验证 token 的有效性
@@ -66,7 +67,7 @@ public class JwtInterceptor implements HandlerInterceptor {
             build.verify(token);
         } catch (JWTVerificationException e) {
             System.out.println("token认证失败,请重新登录");
-            //throw new CustomException("token认证失败,请重新登录");
+            throw new CustomException("token认证失败,请重新登录");
         }
         return true;
     }
