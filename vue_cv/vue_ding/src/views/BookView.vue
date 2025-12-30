@@ -37,7 +37,7 @@
       <div v-for="item in tableData" :key="item.id" class="image-item">
         <el-image 
           class="image-preview"
-          :src="'http://localhost:8080/api/files/' + item.img" 
+          :src="getImageUrl(item.img)"
           :preview-src-list="previewList"
           fit="cover"
           :alt="item.name || '图片'"
@@ -274,13 +274,14 @@ export default {
       // 清理文件名中的多余空格
       const cleanFilename = filename.trim()
       
-      // 构建正确的API路径
-      // 注意：这里使用/files/接口，而不是/api/files/
-      // 因为request.js中已经设置了baseURL: 'http://localhost:8080/api'
-      // 所以这里只需要相对路径
-      const url = `/files/${cleanFilename}`
+      // 构建完整的可访问URL，保证预览和直接加载都一致
+      // 如果需要改为相对路径或使用代理，请调整为对应的域名或baseURL
+      const host = 'http://localhost:8080'
+      const apiPrefix = '/api'
+      // 对文件名进行编码，避免空格或特殊字符导致的404
+      const encoded = encodeURIComponent(cleanFilename)
+      const url = `${host}${apiPrefix}/files/${encoded}`
       console.log('生成的URL:', url) // 调试用
-      
       return url
     },
     

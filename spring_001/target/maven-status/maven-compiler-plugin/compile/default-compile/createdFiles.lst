@@ -1,6 +1,6 @@
-com\ding\spring_001\service\UserService.class
 com\ding\spring_001\Spring001Application.class
 com\ding\spring_001\mapper\UserMapper.class
+com\ding\spring_001\service\UserService.class
 com\ding\spring_001\entity\User.class
 com\ding\spring_001\controller\UserController.class
 com\ding\spring_001\service\UserServiceImpl.class

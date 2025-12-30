@@ -25,7 +25,7 @@ public class SharedFolderUploadService {
     public static final String filePath = System.getProperty("user.dir") + "/file/";
 
     //从yml中获取共享文件夹路径
-    @Value("${shared.folder.path://192.168.146.38/share/}")
+    @Value("${shared.folder.path://172.17.13.75/shared/}")
     private String sharedFolderPath;
 
     @org.springframework.beans.factory.annotation.Autowired

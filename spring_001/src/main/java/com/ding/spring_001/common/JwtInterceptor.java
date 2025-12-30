@@ -30,6 +30,18 @@ public class JwtInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        // 放行：允许无 token 的静态文件获取请求（仅放行直接访问单个文件的 GET 请求）
+        try {
+            String method = request.getMethod();
+            String uri = request.getRequestURI();
+            // 仅对 GET 且匹配 /api/files/{flag} 形式的请求放行，避免放行 /api/files/upload 或 /api/files/uploadAll
+            if ("GET".equalsIgnoreCase(method) && uri.matches("^/api/files/(?!upload$|uploadAll$).+$")) {
+                return true;
+            }
+        } catch (Exception ignore) {
+            // 忽略匹配异常，继续走正常认证逻辑
+        }
+
         // 1. 从请求头中获取token
         String token = request.getHeader("token");
         // 担心你将token直接放在参数中的
