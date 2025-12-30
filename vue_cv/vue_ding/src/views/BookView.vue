@@ -84,6 +84,9 @@
 import request from '@/utils/request'
 export default {
   data() {
+      // 从localStorage获取用户信息
+    const userInfo = JSON.parse(localStorage.getItem("user") || localStorage.getItem("userInfo") || "{}")
+    const userId = userInfo.id || null
     return {
       /* 定义一个数组用于存放表格的数据 */
       tableData: [],
@@ -92,6 +95,7 @@ export default {
         author: '',
         pageNum: 1,
         pageSize: 5,
+        userid: userId,
       },
       total: 0,
       dialogFormVisible: false,
@@ -102,6 +106,7 @@ export default {
         price: '',
         press: '',
         img: '',
+        userid: userId
       },
     }
   },
@@ -140,7 +145,7 @@ export default {
 
     //用户输入信息点击查询按钮调用方法
     search() {
-      request.get("/Image/userid", { params: this.params }).then(res => {
+      request.get("/Image/userid", { params: { userid: this.params.userid } }).then(res => {
         if (res.code === '0') {
           this.tableData = res.data
           this.total = res.data

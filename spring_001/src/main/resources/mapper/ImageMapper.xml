@@ -6,14 +6,14 @@
 <mapper namespace="com.ding.spring_001.mapper.ImageMapper">
 
     <select id="selectAll" resultType="com.ding.spring_001.entity.Image">
-        select * from Image
+        select * from image
 
     </select>
-    <select id="findById" resultType="com.ding.spring_001.entity.Image" parameterType="com.ding.spring_001.entity.Image">
-        select * from Image
+    <select id="findById" resultType="com.ding.spring_001.entity.Image" parameterType="com.ding.spring_001.entity.User">
+        select * from image
         <where>
             <if test="userid != null">
-                AND userid = #{image.userid}
+                AND userid = #{userid}
             </if>
         </where>
     </select>
