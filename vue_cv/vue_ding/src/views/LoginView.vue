@@ -55,16 +55,16 @@ export default {
             }
         };
         return {
-            options: [{
-                value: 1,
-                label: '学生'
-            }, {
-                value: 2,
-                label: '教职工'
-            }, {
-                value: 3,
-                label: '实验室管理员'
-            }],
+            // options: [{
+            //     value: 1,
+            //     label: '学生'
+            // }, {
+            //     value: 2,
+            //     label: '教职工'
+            // }, {
+            //     value: 3,
+            //     label: '实验室管理员'
+            // }],
             value: '',
             ruleForm: {
                 username: '',
