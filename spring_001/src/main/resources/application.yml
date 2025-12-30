@@ -41,4 +41,4 @@ auto:
 
 shared:
   folder:
-    path: //192.168.146.38/share/
+    path: \\LAPTOP-RKNMTCSJ\Users\EchoVibes\Desktop\intrusion-detection\share

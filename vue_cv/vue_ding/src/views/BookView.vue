@@ -89,7 +89,7 @@ export default {
       console.error('解析用户信息失败:', e)
     }
     
-    const userId = userInfo.id || null
+    const userId = userInfo.id !== undefined && userInfo.id !== null ? userInfo.id : null
     
     return {
       tableData: [], // 图片数据
@@ -158,8 +158,8 @@ export default {
         this.loading = true
         this.hasError = false
         
-        // 检查用户登录状态
-        if (!this.params.userid) {
+        // 检查用户登录状态（支持普通用户和admin账号）
+        if (this.params.userid === null || this.params.userid === undefined) {
           this.$message.warning('请先登录以查看图片')
           // 这里可以添加跳转到登录页的逻辑
           this.loading = false
@@ -181,7 +181,7 @@ export default {
     
     // 调用上传接口
     async uploadAll() {
-      if (!this.params.userid) {
+      if (this.params.userid === null || this.params.userid === undefined) {
         this.$message.warning('请先登录再上传图片')
         return
       }
@@ -223,8 +223,8 @@ export default {
     // 加载图片数据
     async loadImages() {
       try {
-        // 检查是否有用户ID
-        if (!this.params.userid) {
+        // 检查是否有用户ID（支持普通用户和admin账号）
+        if (this.params.userid === null || this.params.userid === undefined) {
           console.warn('未找到用户ID')
           this.tableData = []
           return

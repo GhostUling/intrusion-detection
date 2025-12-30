@@ -18,8 +18,7 @@ public class WebConfig implements WebMvcConfigurer {//WebMvcConfigurer 是 Sprin
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor).addPathPatterns("/api/**").excludePathPatterns("/api/user/login",
-                "/api/user/register",
-                "/api/book/**"
+                "/api/user/register"
         );
     }
 
