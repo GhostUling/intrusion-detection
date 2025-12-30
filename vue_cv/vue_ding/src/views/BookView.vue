@@ -140,7 +140,8 @@ export default {
         const userStr = localStorage.getItem("user") || localStorage.getItem("userInfo")
         if (userStr) {
           const userInfo = JSON.parse(userStr)
-          this.params.userid = userInfo.id || null
+          // 保留 id=0 的 admin 情况，使用 nullish 合并以避免将 0 误转为 null
+          this.params.userid = (userInfo.id ?? userInfo.userId) ?? null
           // 刷新图片数据
           this.loadImages()
         } else {
@@ -230,16 +231,31 @@ export default {
           return
         }
         
-        const res = await request.get("/Image/userid", { 
-          params: { 
-            userid: this.params.userid 
-          } 
-        })
+        // 管理员（id=0）应查看所有图片，调用 /Image/selectAll；其它用户按 userid 查询
+        let res;
+        if (this.params.userid === 0) {
+          res = await request.get('/Image/selectAll');
+        } else {
+          res = await request.get('/Image/userid', { params: { userid: this.params.userid } });
+        }
         
         console.log('图片数据响应:', res) // 调试用
         
         if (res.code === '0' || res.code === 200) {
-          this.tableData = res.data || []
+          // 兼容后端可能返回的多种结构：直接数组、{ list: [] }、{ data: [] } 等
+          let list = [];
+          if (Array.isArray(res.data)) {
+            list = res.data;
+          } else if (res.data) {
+            if (Array.isArray(res.data.list)) {
+              list = res.data.list;
+            } else if (Array.isArray(res.data.rows)) {
+              list = res.data.rows;
+            } else if (Array.isArray(res.data.data)) {
+              list = res.data.data;
+            }
+          }
+          this.tableData = list || []
           if (this.tableData.length === 0) {
             console.log('暂无图片数据')
           } else {

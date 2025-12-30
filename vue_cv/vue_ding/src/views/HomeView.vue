@@ -56,11 +56,13 @@ export default {
     return {
       userCount: 0,
       imageCount: 125,
-      loadingUserCount: false
+      loadingUserCount: false,
+      loadingImageCount: false
     };
   },
   mounted() {
     this.fetchUserCount();
+    this.fetchImageCount();
   },
   methods: {
     async fetchUserCount() {
@@ -77,6 +79,64 @@ export default {
         console.error('请求用户总数出错', err);
       } finally {
         this.loadingUserCount = false;
+      }
+    }
+    ,
+    // 新增：获取已上传图片数量（使用 BookView 相同的接口）
+    async fetchImageCount() {
+      this.loadingImageCount = true;
+      try {
+        // 从 localStorage 获取用户ID（兼容 user 或 userInfo）
+        let userStr = null;
+        try {
+          userStr = localStorage.getItem('user') || localStorage.getItem('userInfo');
+        } catch (e) {
+          console.error('读取用户信息失败', e);
+        }
+        if (!userStr) {
+          this.imageCount = 0;
+          return;
+        }
+        let userInfo = null;
+        try {
+          userInfo = JSON.parse(userStr);
+        } catch (e) {
+          console.error('解析用户信息失败', e);
+          this.imageCount = 0;
+          return;
+        }
+        const userid = userInfo && (userInfo.id || userInfo.userId || userInfo.userID) ? (userInfo.id || userInfo.userId || userInfo.userID) : null;
+        if (userid === null || userid === undefined) {
+          this.imageCount = 0;
+          return;
+        }
+
+        // 如果是 admin（约定 id=0 或 username 为 admin），则统计数据库中所有图片数量
+        const isAdmin = (userid === 0) || (userInfo.username && String(userInfo.username).toLowerCase() === 'admin');
+        if (isAdmin) {
+          const res = await request.get('/Image/selectAll');
+          if (res && (res.code === '0' || res.code === 200)) {
+            const images = res.data || [];
+            this.imageCount = Array.isArray(images) ? images.length : Number(images) || 0;
+          } else {
+            console.error('获取所有图片数量失败', res && res.msg);
+            this.imageCount = 0;
+          }
+        } else {
+          const res = await request.get('/Image/userid', { params: { userid } });
+          if (res && (res.code === '0' || res.code === 200)) {
+            const images = res.data || [];
+            this.imageCount = Array.isArray(images) ? images.length : Number(images) || 0;
+          } else {
+            console.error('获取图片数量失败', res && res.msg);
+            this.imageCount = 0;
+          }
+        }
+      } catch (err) {
+        console.error('请求图片数量出错', err);
+        this.imageCount = 0;
+      } finally {
+        this.loadingImageCount = false;
       }
     }
   }
