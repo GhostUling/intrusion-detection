@@ -31,3 +31,14 @@ page-helper:
   reasonable: true
   #允许在查询方法中直接传递分页参数
   support-methods-arguments: true
+
+# 自动上传配置
+auto:
+  upload:
+    enabled: false  # 是否启用自动上传
+    cron: "0 */1 * * * ?"  # 每30分钟执行一次
+    # cron: "0 0 */2 * * ?"  # 每2小时执行一次
+
+shared:
+  folder:
+    path: //172.25.192.1/share/
