@@ -10,7 +10,7 @@
         <!-- 退出登录组件 -->
         <el-dropdown trigger="click" style="color: white; font-size: 16px; float: right; height:60px; line-height:60px">
           <span class="el-dropdown-link">
-            {{ user.name }}<i class="el-icon-arrow-down el-icon--right"></i>
+            {{ isAdmin ? '管理员' : (user.name || user.name) }}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>
@@ -31,7 +31,7 @@
               <span slot="title">系统首页</span>
             </el-menu-item>
 
-            <el-menu-item index="/user" v-if="user.type != 'role_student'">
+            <el-menu-item index="/user" v-if="isAdmin">
               <i class="el-icon-user"></i>
               <span slot="title">用户信息</span>
             </el-menu-item>
@@ -58,6 +58,11 @@ export default {
     return {
       //获取到当前登陆用户信息
       user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
+    }
+  },
+  computed: {
+    isAdmin() {
+      return this.user && (this.user.username === 'admin' || this.user.name === 'admin');
     }
   },
   methods: {

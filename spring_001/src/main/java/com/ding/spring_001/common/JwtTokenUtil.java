@@ -15,11 +15,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-
 import java.util.Date;
 
 /**
  * 生成token的工具类
+ * 
  * @author hxy
  * @date 2023/10/18
  */
@@ -37,22 +37,23 @@ public class JwtTokenUtil {
 
     /**
      * 生成token
+     * 
      * @param userId
      * @param password
      * @return
      */
     public static String getToken(String userId, String password) {
         return JWT.create()
-                .withAudience(userId) //通过userId创建token,作为载荷
-                .withExpiresAt(DateUtil.offsetHour(new Date(), 2000))//（过期时间）2小时过期
-                .sign(Algorithm.HMAC512(password)); //以password作为token的密钥
+                .withAudience(userId) // 通过userId创建token,作为载荷
+                .withExpiresAt(DateUtil.offsetHour(new Date(), 2000))// （过期时间）2小时过期
+                .sign(Algorithm.HMAC512(password)); // 以password作为token的密钥
     }
-
 
     public static User getCurrentUser() {
         String token = null;
         try {
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                    .getRequest();
             token = request.getHeader("token");
             if (StrUtil.isBlank(token)) {
                 token = request.getParameter("token");
@@ -61,8 +62,16 @@ public class JwtTokenUtil {
                 log.error("获取当前登录的token失败,token:{}", token);
                 return null;
             }
-            //解析token,获取用户id
+            // 解析token,获取用户id
             String userId = JWT.decode(token).getAudience().get(0);
+            // 如果是本地 admin（id=0），返回构造的 admin 用户
+            if ("0".equals(userId)) {
+                User adminUser = new User();
+                adminUser.setId(0);
+                adminUser.setUsername("admin");
+                adminUser.setPassword("admin123");
+                return adminUser;
+            }
             return staticUserService.findById(Integer.valueOf(userId));
         } catch (Exception e) {
             log.error("获取当前登录的管理员信息失败,token={}", token, e);

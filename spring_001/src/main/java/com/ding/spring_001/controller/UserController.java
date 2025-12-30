@@ -3,6 +3,7 @@ package com.ding.spring_001.controller;
 import com.ding.spring_001.common.Result;
 import com.ding.spring_001.entity.User;
 import com.ding.spring_001.service.UserService;
+import com.ding.spring_001.common.JwtTokenUtil;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,6 +28,18 @@ public class UserController {
     /* 用户登录 */
     @PostMapping("/login")
     public Result login(@RequestBody User user) {
+        // 支持本地 admin/admin123 登录（不存入数据库）
+        if (user != null && user.getUsername() != null && user.getPassword() != null
+                && "admin".equals(user.getUsername()) && "admin123".equals(user.getPassword())) {
+            User adminUser = new User();
+            adminUser.setId(0);
+            adminUser.setUsername("admin");
+            adminUser.setPassword("admin123");
+            String token = JwtTokenUtil.getToken(String.valueOf(adminUser.getId()), adminUser.getPassword());
+            adminUser.setToken(token);
+            return Result.success(adminUser);
+        }
+
         User dataSourceUser = userService.selectByUserNameAndPass(user);
         if (dataSourceUser == null) {
             return Result.error("请输入正确的用户名或密码");
