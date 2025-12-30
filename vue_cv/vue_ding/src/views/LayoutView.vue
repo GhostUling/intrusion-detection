@@ -35,17 +35,12 @@
               <i class="el-icon-user"></i>
               <span slot="title">用户信息</span>
             </el-menu-item>
+
+            <el-menu-item index="/book" v-if="user.type != 'role_student'">
+              <i class="el-icon-picture-outline"></i>
+              <span slot="title">图片管理</span>
+            </el-menu-item>
             
-            <el-submenu index="3">
-              <template slot="title">
-                <i class="el-icon-picture-outline"></i>
-                <span>图片管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="/bml">图片文件</el-menu-item>
-                <el-menu-item index="/book">图书管理</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
           </el-menu>
         </el-aside>
         <el-main style="padding: 20px; background-color: white;">
