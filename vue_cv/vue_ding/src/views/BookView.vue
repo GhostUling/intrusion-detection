@@ -68,7 +68,7 @@ export default {
     // 调用上传接口
     uploadAll() {
       return new Promise((resolve, reject) => {
-        request.get("/uploadAll")
+        request.get("/files/uploadAll", { params: { userid: this.params.userid } })
           .then(res => {
             if (res.code === '0') {
               this.$message.success(res.msg || '上传成功')
