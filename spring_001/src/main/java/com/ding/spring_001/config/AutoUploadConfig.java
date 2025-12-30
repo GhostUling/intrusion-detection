@@ -42,7 +42,7 @@ public class AutoUploadConfig {
 
         log.info("开始执行自动上传任务");
         try {
-            Result result = uploadService.uploadAllImages();
+            Result result = uploadService.uploadAllImages(null);
             log.info("自动上传完成: {}", result.getMsg());
         } catch (Exception e) {
             log.error("自动上传任务执行失败", e);

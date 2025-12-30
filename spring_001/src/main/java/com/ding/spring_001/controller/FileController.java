@@ -19,13 +19,15 @@ public class FileController {
 
     @Autowired
     private SharedFolderUploadService sharedFolderUploadService;
+    @Autowired
+    private com.ding.spring_001.service.ImageService imageService;
 
     //文件上传存在什么位置
     public static final String filePath = System.getProperty("user.dir") + "/file/";
 
     @GetMapping("/uploadAll")
-    public Result uploadAll(){
-        return sharedFolderUploadService.uploadAllImages();
+    public Result uploadAll(@org.springframework.web.bind.annotation.RequestParam(value = "userid", required = false) Integer userid){
+        return sharedFolderUploadService.uploadAllImages(userid);
     }
 
     @PostMapping("/upload")
@@ -43,6 +45,15 @@ public class FileController {
                 //文件存储形式:时间戳-文件名
                 FileUtil.writeBytes(file.getBytes(), filePath + flag + "+" + fileName);
                 System.out.println(fileName + "-- 上传成功 ");
+                // 将图片信息插入数据库（只保存文件名）
+                try {
+                    com.ding.spring_001.entity.Image img = new com.ding.spring_001.entity.Image();
+                    img.setUserid(null);
+                    img.setImg(flag + "+" + fileName);
+                    imageService.add(img);
+                } catch (Exception ex) {
+                    System.err.println("图片信息入库失败: " + ex.getMessage());
+                }
                 Thread.sleep(1L);
             } catch (Exception e) {
                 System.err.println(fileName + "-- 文件 上传失败 ");

@@ -34,11 +34,14 @@ public class ImageServiceImpl implements ImageService {
     }
 
     public void add(Image Image) {
+        ImageMapper.insert(Image);
     }
 
     public void update(Image Image) {
+        ImageMapper.update(Image);
     }
 
     public void del(Integer id) {
+        ImageMapper.deleteById(id);
     }
 }

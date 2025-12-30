@@ -41,4 +41,4 @@ auto:
 
 shared:
   folder:
-    path: //172.25.192.1/share/
+    path: //192.168.146.38/share/

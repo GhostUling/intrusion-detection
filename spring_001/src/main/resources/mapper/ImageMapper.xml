@@ -17,4 +17,18 @@
             </if>
         </where>
     </select>
+    <insert id="insert" parameterType="com.ding.spring_001.entity.Image" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO image (userid, img)
+        VALUES (#{userid}, #{img})
+    </insert>
+
+    <update id="update" parameterType="com.ding.spring_001.entity.Image">
+        UPDATE image
+        SET userid = #{userid}, img = #{img}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="int">
+        DELETE FROM image WHERE id = #{id}
+    </delete>
 </mapper>

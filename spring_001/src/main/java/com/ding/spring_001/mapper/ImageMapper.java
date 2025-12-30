@@ -9,4 +9,7 @@ import java.util.List;
 public interface ImageMapper{
     List<Image> selectAll();
     List<Image> findById(@Param("userid") Integer userid);
+    int insert(Image image);
+    int update(Image image);
+    int deleteById(@Param("id") Integer id);
 }

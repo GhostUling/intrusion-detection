@@ -25,8 +25,11 @@ public class SharedFolderUploadService {
     public static final String filePath = System.getProperty("user.dir") + "/file/";
 
     //从yml中获取共享文件夹路径
-    @Value("${shared.folder.path://172.25.192.1/share/}")
+    @Value("${shared.folder.path://192.168.146.38/share/}")
     private String sharedFolderPath;
+
+    @org.springframework.beans.factory.annotation.Autowired
+    private com.ding.spring_001.service.ImageService imageService;
 
 
     public Result upLoad(MultipartFile file) {
@@ -43,6 +46,15 @@ public class SharedFolderUploadService {
                 //文件存储形式:时间戳-文件名
                 FileUtil.writeBytes(file.getBytes(), filePath + flag + "+" + fileName);
                 System.out.println(fileName + "-- 上传成功 ");
+                // 保存到数据库
+                try {
+                    com.ding.spring_001.entity.Image img = new com.ding.spring_001.entity.Image();
+                    img.setUserid(null);
+                    img.setImg(flag + "+" + fileName);
+                    imageService.add(img);
+                } catch (Exception ex) {
+                    System.err.println("批量上传：图片信息入库失败: " + ex.getMessage());
+                }
                 Thread.sleep(1L);
             } catch (Exception e) {
                 System.err.println(fileName + "-- 文件 上传失败 ");
@@ -51,7 +63,7 @@ public class SharedFolderUploadService {
         }
     }
 
-    public Result uploadAllImages() {
+    public Result uploadAllImages(Integer userid) {
         try {
             Path sharedPath = Paths.get(sharedFolderPath);
             if (!Files.exists(sharedPath) || !Files.isDirectory(sharedPath)) {
@@ -90,8 +102,8 @@ public class SharedFolderUploadService {
                 }
             }));
 
-            // 批量上传
-            return batchUploadImages(imageFiles);
+            // 批量上传，传入 userid
+            return batchUploadImages(imageFiles, userid);
 
         } catch (Exception e) {
             return Result.error("扫描失败: " + e.getMessage());
@@ -115,7 +127,7 @@ public class SharedFolderUploadService {
     /**
      * 批量上传图片
      */
-    private Result batchUploadImages(List<Path> imageFiles) {
+    private Result batchUploadImages(List<Path> imageFiles, Integer userid) {
         if (imageFiles.isEmpty()) {
             return Result.error("文件列表为空");
         }
@@ -125,39 +137,71 @@ public class SharedFolderUploadService {
         List<String> successFiles = Collections.synchronizedList(new ArrayList<>());
         List<String> failFiles = Collections.synchronizedList(new ArrayList<>());
 
-        // 一次全部上传（并行处理）
+        // 一次全部上传（并行处理），并将 userid 传入，同时统计结果
         imageFiles.parallelStream().forEach(file -> {
-            Result result = uploadSingleFile(file);
+            Result result = uploadSingleFile(file, userid);
+            String name = file.getFileName().toString();
+            if (result != null && Result.SUCCESS.equals(result.getCode())) {
+                successCount.incrementAndGet();
+                successFiles.add(name);
+            } else {
+                failCount.incrementAndGet();
+                failFiles.add(name);
+            }
         });
 
-        return Result.success();
+        // 返回上传摘要
+        java.util.Map<String, Object> summary = new java.util.HashMap<>();
+        summary.put("total", imageFiles.size());
+        summary.put("success", successCount.get());
+        summary.put("fail", failCount.get());
+        summary.put("successFiles", successFiles);
+        summary.put("failFiles", failFiles);
+
+        return Result.success(summary);
     }
 
     /**
      * 上传单个文件
      */
-    private Result uploadSingleFile(Path filePath) {
+    private Result uploadSingleFile(Path srcPath, Integer userid) {
         try {
-            String filename = filePath.getFileName().toString();
+            String filename = srcPath.getFileName().toString();
 
             // 检查是否已上传过
 
             // 将File转换为MultipartFile
-            MultipartFile multipartFile = convertToMultipartFile(filePath);
+            MultipartFile multipartFile = convertToMultipartFile(srcPath);
 
             if (multipartFile == null) {
                 return Result.error("文件转换失败");
             }
 
-            // 调用FileController的上传接口
-            Result result = upLoad(multipartFile);
-
-            if (result.getCode() .equals("200") ) {
-
-                return Result.success("上传成功");
-            } else {
-                return Result.error("上传失败");
+            // 直接在此写文件并保存到数据库，保证使用传入的 userid
+            synchronized (FileController.class) {
+                // 生成时间戳作为标识
+                String flag = System.currentTimeMillis() + "";
+                try {
+                    if (!FileUtil.isDirectory(filePath))
+                        FileUtil.mkdir(filePath);
+                    FileUtil.writeBytes(multipartFile.getBytes(), filePath + flag + "+" + filename);
+                    System.out.println(filename + "-- 上传成功 ");
+                    // 保存到数据库
+                    try {
+                        com.ding.spring_001.entity.Image img = new com.ding.spring_001.entity.Image();
+                        img.setUserid(userid);
+                        img.setImg(flag + "+" + filename);
+                        imageService.add(img);
+                    } catch (Exception ex) {
+                        System.err.println("批量上传：图片信息入库失败: " + ex.getMessage());
+                    }
+                    Thread.sleep(1L);
+                } catch (Exception e) {
+                    System.err.println(filename + "-- 文件 上传失败 ");
+                    return Result.error("上传失败");
+                }
             }
+            return Result.success("上传成功");
 
         } catch (Exception e) {
             return Result.error("上传失败");
