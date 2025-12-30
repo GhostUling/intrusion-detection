@@ -256,6 +256,15 @@ export default {
             }
           }
           this.tableData = list || []
+          // 将图片数量写入 localStorage，供 HomeView 使用
+          try {
+            const cnt = Array.isArray(this.tableData) ? this.tableData.length : 0;
+            localStorage.setItem('book_image_count', String(cnt));
+            // 触发全局自定义事件（在同一窗口中监听）
+            window.dispatchEvent(new CustomEvent('bookImageCountUpdated', { detail: { count: cnt } }));
+          } catch (e) {
+            console.warn('无法写入 book_image_count 到 localStorage', e);
+          }
           if (this.tableData.length === 0) {
             console.log('暂无图片数据')
           } else {

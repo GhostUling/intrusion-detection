@@ -62,7 +62,22 @@ export default {
   },
   mounted() {
     this.fetchUserCount();
-    this.fetchImageCount();
+    // 优先使用 BookView 写入的计数（localStorage + 事件），没有则回退到接口
+    try {
+      const stored = localStorage.getItem('book_image_count');
+      if (stored !== null) {
+        this.imageCount = Number(stored) || 0;
+      } else {
+        this.fetchImageCount();
+      }
+    } catch (e) {
+      this.fetchImageCount();
+    }
+    // 监听 BookView 的计数更新事件
+    window.addEventListener('bookImageCountUpdated', this.onBookImageCountUpdated);
+  },
+  beforeDestroy() {
+    window.removeEventListener('bookImageCountUpdated', this.onBookImageCountUpdated);
   },
   methods: {
     async fetchUserCount() {
@@ -79,6 +94,74 @@ export default {
         console.error('请求用户总数出错', err);
       } finally {
         this.loadingUserCount = false;
+      }
+    }
+    ,
+    // 获取图片数量，管理员显示所有图片数量，普通用户显示个人图片数量
+    async fetchImageCount() {
+      this.loadingImageCount = true;
+      try {
+        // 读取本地用户信息，兼容多种字段名
+        let userStr = null;
+        try {
+          userStr = localStorage.getItem('user') || localStorage.getItem('userInfo');
+        } catch (e) {
+          console.error('读取用户信息失败', e);
+        }
+        if (!userStr) {
+          this.imageCount = 0;
+          return;
+        }
+        let userInfo = null;
+        try {
+          userInfo = JSON.parse(userStr);
+        } catch (e) {
+          console.error('解析用户信息失败', e);
+          this.imageCount = 0;
+          return;
+        }
+
+        const rawId = userInfo && (userInfo.id ?? userInfo.userId ?? userInfo.userID);
+        const userid = rawId === undefined || rawId === null ? null : Number(rawId);
+        const username = userInfo && userInfo.username ? String(userInfo.username).toLowerCase() : '';
+
+        const isAdmin = (userid === 0) || (username === 'admin');
+
+        let res;
+        if (isAdmin) {
+          res = await request.get('/Image/selectAll');
+        } else {
+          if (userid === null) {
+            this.imageCount = 0;
+            return;
+          }
+          res = await request.get('/Image/userid', { params: { userid } });
+        }
+
+        if (res && (res.code === '0' || res.code === 200)) {
+          // 规范化为数组：兼容直接数组或在不同字段内返回
+          let list = [];
+          if (Array.isArray(res.data)) {
+            list = res.data;
+          } else if (res.data) {
+            if (Array.isArray(res.data.list)) {
+              list = res.data.list;
+            } else if (Array.isArray(res.data.rows)) {
+              list = res.data.rows;
+            } else if (Array.isArray(res.data.data)) {
+              list = res.data.data;
+            }
+          }
+          this.imageCount = Array.isArray(list) ? list.length : Number(list) || 0;
+        } else {
+          console.error('获取图片数量失败', res && res.msg);
+          this.imageCount = 0;
+        }
+      } catch (err) {
+        console.error('请求图片数量出错', err);
+        this.imageCount = 0;
+      } finally {
+        this.loadingImageCount = false;
       }
     }
     ,
@@ -137,6 +220,16 @@ export default {
         this.imageCount = 0;
       } finally {
         this.loadingImageCount = false;
+      }
+    }
+    ,
+    onBookImageCountUpdated(e) {
+      try {
+        if (e && e.detail && typeof e.detail.count !== 'undefined') {
+          this.imageCount = Number(e.detail.count) || 0;
+        }
+      } catch (err) {
+        console.error('处理 bookImageCountUpdated 事件失败', err);
       }
     }
   }
