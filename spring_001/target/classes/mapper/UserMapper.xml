@@ -52,6 +52,10 @@
         select * from user where id = #{id}
     </select>
 
+    <select id="countUsers" resultType="int">
+        select count(*) from user
+    </select>
+
 
     <update id="update">
         update user set username = #{username}, 

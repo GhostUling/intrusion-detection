@@ -27,4 +27,6 @@ public interface UserMapper {
 
     
     User findById(Integer id);
+
+    int countUsers();
 }

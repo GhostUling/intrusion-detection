@@ -48,13 +48,37 @@
 </template>
 
 <script>
+import request from "../utils/request";
+
 export default {
   name: "HomeView",
   data() {
     return {
-      userCount: 8,
-      imageCount: 125
+      userCount: 0,
+      imageCount: 125,
+      loadingUserCount: false
     };
+  },
+  mounted() {
+    this.fetchUserCount();
+  },
+  methods: {
+    async fetchUserCount() {
+      this.loadingUserCount = true;
+      try {
+        const res = await request.get('/user/count');
+        // 后端返回的 Result.data 中存放真正的数据（参照后端 Result.success）
+        if (res && res.code === '0') {
+          this.userCount = Number(res.data) || 0;
+        } else {
+          console.error('获取用户总数失败', res && res.msg);
+        }
+      } catch (err) {
+        console.error('请求用户总数出错', err);
+      } finally {
+        this.loadingUserCount = false;
+      }
+    }
   }
 };
 </script>

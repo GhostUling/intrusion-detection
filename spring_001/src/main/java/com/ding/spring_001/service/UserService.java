@@ -34,4 +34,6 @@ public interface UserService {
 
     
     User findById(Integer integer);
+
+    int countUsers();
 }
