@@ -1,14 +1,47 @@
 <template>
   <div class="image-gallery">
-    <div class="image-container">
-      <!-- 使用flex布局实现每排5张图片 -->
+    <!-- 添加一个顶部工具栏 -->
+    <div class="toolbar">
+      <el-button 
+        type="primary" 
+        size="small" 
+        @click="initPage"
+        :loading="loading"
+        icon="el-icon-refresh"
+      >
+        刷新
+      </el-button>
+      <el-button 
+        type="success" 
+        size="small" 
+        @click="uploadAll"
+        :loading="uploading"
+        icon="el-icon-upload"
+      >
+        上传图片
+      </el-button>
+      <span v-if="tableData.length > 0" class="image-count">
+        共 {{ tableData.length }} 张图片
+      </span>
+    </div>
+    
+    <!-- 空状态提示 -->
+    <div v-if="tableData.length === 0 && !loading" class="empty-state">
+      <el-empty description="暂无图片">
+        <el-button type="primary" @click="uploadAll">上传图片</el-button>
+      </el-empty>
+    </div>
+    
+    <!-- 图片容器 -->
+    <div v-else class="image-container">
       <div v-for="item in tableData" :key="item.id" class="image-item">
         <el-image 
           class="image-preview"
-          :src="getImageUrl(item.img)" 
+          :src="'http://localhost:8080/api/files/' + item.img" 
           :preview-src-list="previewList"
           fit="cover"
           :alt="item.name || '图片'"
+          lazy
         >
           <!-- 加载失败的占位图 -->
           <div slot="error" class="image-slot">
@@ -25,6 +58,16 @@
         <div v-if="item.name" class="image-name">{{ item.name }}</div>
       </div>
     </div>
+    
+    <!-- 加载状态 -->
+    <div v-if="loading" class="loading-overlay">
+      <el-card shadow="never" class="loading-card">
+        <div class="loading-content">
+          <i class="el-icon-loading loading-icon"></i>
+          <p>加载中...</p>
+        </div>
+      </el-card>
+    </div>
   </div>
 </template>
 
@@ -32,9 +75,20 @@
 import request from '@/utils/request'
 
 export default {
+  name: 'BookView',
+  
   data() {
     // 从localStorage获取用户信息
-    const userInfo = JSON.parse(localStorage.getItem("user") || localStorage.getItem("userInfo") || "{}")
+    let userInfo = {}
+    try {
+      const userStr = localStorage.getItem("user") || localStorage.getItem("userInfo")
+      if (userStr) {
+        userInfo = JSON.parse(userStr)
+      }
+    } catch (e) {
+      console.error('解析用户信息失败:', e)
+    }
+    
     const userId = userInfo.id || null
     
     return {
@@ -42,7 +96,10 @@ export default {
       params: {
         userid: userId, // 用户ID用于查询图片
       },
-      loading: false
+      loading: false,
+      uploading: false,
+      hasError: false,
+      errorMessage: ''
     }
   },
   
@@ -60,18 +117,53 @@ export default {
     this.initPage()
   },
   
+  mounted() {
+    // 监听localStorage变化，以便用户登录/注销时刷新页面
+    window.addEventListener('storage', this.handleStorageChange)
+  },
+  
+  beforeDestroy() {
+    window.removeEventListener('storage', this.handleStorageChange)
+  },
+  
   methods: {
+    // 处理localStorage变化
+    handleStorageChange(e) {
+      if (e.key === 'user' || e.key === 'userInfo') {
+        this.refreshUserInfo()
+      }
+    },
+    
+    // 刷新用户信息
+    refreshUserInfo() {
+      try {
+        const userStr = localStorage.getItem("user") || localStorage.getItem("userInfo")
+        if (userStr) {
+          const userInfo = JSON.parse(userStr)
+          this.params.userid = userInfo.id || null
+          // 刷新图片数据
+          this.loadImages()
+        } else {
+          this.params.userid = null
+          this.tableData = []
+        }
+      } catch (e) {
+        console.error('刷新用户信息失败:', e)
+      }
+    },
+    
     // 初始化页面
     async initPage() {
       try {
         this.loading = true
+        this.hasError = false
         
-        // 可选：先执行上传
-        try {
-          await this.uploadAll()
-        } catch (uploadError) {
-          console.warn('上传失败，继续加载现有图片:', uploadError)
-          // 上传失败不影响加载现有图片
+        // 检查用户登录状态
+        if (!this.params.userid) {
+          this.$message.warning('请先登录以查看图片')
+          // 这里可以添加跳转到登录页的逻辑
+          this.loading = false
+          return
         }
         
         // 加载图片数据
@@ -79,31 +171,53 @@ export default {
         
       } catch (error) {
         console.error('页面初始化失败:', error)
-        this.$message.error('图片加载失败')
+        this.hasError = true
+        this.errorMessage = '页面加载失败: ' + (error.message || '未知错误')
+        this.$message.error('页面加载失败')
       } finally {
         this.loading = false
       }
     },
     
     // 调用上传接口
-    uploadAll() {
-      return new Promise((resolve, reject) => {
-        request.get("/files/uploadAll", { params: { userid: this.params.userid } })
-          .then(res => {
-            if (res.code === '0') {
-              this.$message.success(res.msg || '图片上传成功')
-              resolve(res)
-            } else {
-              this.$message.warning(res.msg || '上传失败，使用现有图片')
-              reject(res)
-            }
-          })
-          .catch(error => {
-            console.error('上传请求失败:', error)
-            this.$message.warning('上传请求失败，使用现有图片')
-            reject(error)
-          })
-      })
+    async uploadAll() {
+      if (!this.params.userid) {
+        this.$message.warning('请先登录再上传图片')
+        return
+      }
+      
+      this.uploading = true
+      try {
+        // 显示确认对话框
+        await this.$confirm('确定要从共享文件夹上传所有图片吗？', '确认上传', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        
+        // 执行上传
+        const res = await request.get("/files/uploadAll", { 
+          params: { 
+            userid: this.params.userid 
+          } 
+        })
+        
+        if (res.code === '0' || res.code === 200) {
+          this.$message.success(res.msg || '图片上传成功')
+          // 上传成功后刷新图片列表
+          await this.loadImages()
+        } else {
+          this.$message.error(res.msg || '上传失败')
+        }
+      } catch (error) {
+        console.error('上传失败:', error)
+        // 如果是用户取消，不显示错误
+        if (error !== 'cancel' && error !== 'close') {
+          this.$message.error('上传失败: ' + (error.message || '未知错误'))
+        }
+      } finally {
+        this.uploading = false
+      }
     },
     
     // 加载图片数据
@@ -111,8 +225,8 @@ export default {
       try {
         // 检查是否有用户ID
         if (!this.params.userid) {
-          console.warn('未找到用户ID，无法加载用户图片')
-          this.$message.info('请先登录以查看图片')
+          console.warn('未找到用户ID')
+          this.tableData = []
           return
         }
         
@@ -122,29 +236,52 @@ export default {
           } 
         })
         
-        if (res.code === '0' && res.data) {
-          this.tableData = res.data
+        console.log('图片数据响应:', res) // 调试用
+        
+        if (res.code === '0' || res.code === 200) {
+          this.tableData = res.data || []
           if (this.tableData.length === 0) {
-            this.$message.info('暂无图片，请先上传')
+            console.log('暂无图片数据')
+          } else {
+            console.log('加载到', this.tableData.length, '张图片')
+            // 调试：查看第一张图片的信息
+            if (this.tableData.length > 0) {
+              console.log('第一张图片:', this.tableData[0])
+              console.log('图片URL:', this.getImageUrl(this.tableData[0].img))
+            }
           }
         } else {
           this.$message.error(res.msg || '获取图片失败')
+          this.tableData = []
         }
       } catch (error) {
         console.error('加载图片失败:', error)
-        this.$message.error('加载图片失败，请检查网络连接')
+        this.$message.error('加载图片失败: ' + (error.message || '请检查网络连接'))
+        this.tableData = []
       }
     },
     
-    // 获取图片URL（处理文件名编码）
+    // 获取图片URL（重要修改：不要编码整个文件名）
     getImageUrl(filename) {
       if (!filename) return ''
       
-      // 对文件名进行URL编码，处理特殊字符
-      const encodedFilename = encodeURIComponent(filename)
+      console.log('原始文件名:', filename) // 调试用
+      
+      // 重要修改：不要对整个文件名进行编码
+      // 后端期望的是原始文件名格式，例如：1701234567890+example.jpg
+      // 直接拼接URL，只对可能有问题的情况进行适当处理
+      
+      // 清理文件名中的多余空格
+      const cleanFilename = filename.trim()
       
       // 构建正确的API路径
-      return `http://localhost:8080/api/files/${encodedFilename}`
+      // 注意：这里使用/files/接口，而不是/api/files/
+      // 因为request.js中已经设置了baseURL: 'http://localhost:8080/api'
+      // 所以这里只需要相对路径
+      const url = `/files/${cleanFilename}`
+      console.log('生成的URL:', url) // 调试用
+      
+      return url
     },
     
     // 手动刷新图片
@@ -159,6 +296,22 @@ export default {
 .image-gallery {
   padding: 20px;
   min-height: 400px;
+  position: relative;
+}
+
+.toolbar {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.image-count {
+  margin-left: auto;
+  color: #666;
+  font-size: 14px;
 }
 
 .image-container {
@@ -187,6 +340,7 @@ export default {
   transition: transform 0.3s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   background-color: #f5f7fa;
+  object-fit: cover; /* 确保图片填充整个容器 */
 }
 
 .image-preview:hover {
@@ -223,6 +377,12 @@ export default {
   word-break: break-word;
   width: 100%;
   padding: 0 4px;
+  max-height: 32px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 /* 加载状态 */
@@ -239,12 +399,24 @@ export default {
   z-index: 9999;
 }
 
+.loading-card {
+  border: none;
+  background: transparent;
+}
+
+.loading-content {
+  text-align: center;
+}
+
+.loading-icon {
+  font-size: 40px;
+  color: #409EFF;
+  margin-bottom: 10px;
+}
+
 /* 空状态提示 */
 .empty-state {
-  width: 100%;
-  text-align: center;
-  padding: 40px 20px;
-  color: #999;
+  margin-top: 50px;
 }
 
 /* 响应式设计 */
@@ -273,6 +445,16 @@ export default {
   .image-item {
     flex: 0 0 100%; /* 1列 */
     max-width: 100%;
+  }
+  
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .image-count {
+    margin-left: 0;
+    text-align: center;
   }
 }
 </style>
