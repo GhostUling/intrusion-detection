@@ -140,7 +140,7 @@ export default {
                     }
                     
                     // 发送注册请求
-                    request.post('/user/add', params).then(res => {
+                    request.post('/user/register', params).then(res => {
                         // code为0代表注册成功
                         if (res.code == 0) {
                             this.$message.success("注册成功，即将跳转到登录页面")

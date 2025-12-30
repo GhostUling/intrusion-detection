@@ -25,7 +25,10 @@ public interface UserMapper {
 
     User selectByUserNameAndPass(User user);
 
-    
+
+    int addUser(User user);
+
+
     User findById(Integer id);
 
     int countUsers();

@@ -75,12 +75,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public User selectByUserNameAndPass(User user) {
         User dataSourceUser = userMapper.selectByUserNameAndPass(user);
-        if(dataSourceUser != null){
-            String token = JwtTokenUtil.getToken(String.valueOf(dataSourceUser.getId()),dataSourceUser.getPassword());
+        if (dataSourceUser != null) {
+            String token = JwtTokenUtil.getToken(String.valueOf(dataSourceUser.getId()), dataSourceUser.getPassword());
             dataSourceUser.setToken(token);
         }
         return dataSourceUser;
     }
+
+
+    // 注册添加用户信息
+    @Override
+    public int addUser(User user) {
+        return userMapper.add(user);
+    }
+
 
     @Override
     public User findById(Integer id) {

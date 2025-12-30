@@ -34,6 +34,17 @@ public class UserController {
         return Result.success(dataSourceUser);
     }
 
+    /* 用户注册 */
+    @PostMapping("/register")
+    public Result register(@RequestBody User user) {
+        int rows = userService.addUser(user);
+        if (rows > 0) {
+            return Result.success("注册成功");
+        } else {
+            return Result.error("注册失败");
+        }
+    }
+
     /* 查询所有用户信息 */
     @GetMapping("/selectAll")
     public Result selectAll(User user) {

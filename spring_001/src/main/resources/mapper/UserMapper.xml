@@ -10,6 +10,11 @@
         VALUES(#{name},#{username},#{password},#{email},#{intro},#{phone},now(),#{update_time},#{type})
     </insert>
 
+    <insert id="addUser">
+        insert into user(name,username,password,email,phone,create_time,update_time,type)
+        VALUES(#{name},#{username},#{password},#{email},#{phone},now(),now(),#{type})
+    </insert>
+    
 
     <delete id="del">
         delete from user where id = #{id}

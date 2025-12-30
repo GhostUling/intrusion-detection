@@ -17,7 +17,9 @@ public class WebConfig implements WebMvcConfigurer {//WebMvcConfigurer 是 Sprin
     //设置自定义JWT拦截器 并配置拦截规则
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(jwtInterceptor).addPathPatterns("/api/**").excludePathPatterns("/api/user/login");
+        registry.addInterceptor(jwtInterceptor).addPathPatterns("/api/**").excludePathPatterns("/api/user/login",
+                "/api/user/register"
+        );
     }
 
     //这是 WebMvcConfigurer 接口中的一个方法，用于配置路径匹配规则。

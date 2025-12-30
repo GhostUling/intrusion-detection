@@ -33,6 +33,9 @@ public interface UserService {
     User selectByUserNameAndPass(User user);
 
     
+    int addUser(User user);
+    
+
     User findById(Integer integer);
 
     int countUsers();
