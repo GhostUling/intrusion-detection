@@ -27,7 +27,7 @@ public class AutoUploadConfig {
     @Value("${auto.upload.enabled:true}")
     private boolean autoUploadEnabled;
 
-    @Value("${auto.upload.cron:0 0/5 * * * ?}") // 每5分钟执行一次
+    @Value("${auto.upload.cron:0 0/1 * * * ?}") // 每1分钟执行一次
     private String autoUploadCron;
 
     /**
