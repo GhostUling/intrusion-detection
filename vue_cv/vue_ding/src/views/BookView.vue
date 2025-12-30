@@ -48,22 +48,62 @@ export default {
   
   // 在页面加载时执行
   created() {
-    this.search()
+    this.uploadAndLoad()
   },
   
   methods: {
-    // 查询图片数据（保留原方法）
+    // 上传并加载数据
+    async uploadAndLoad() {
+      try {
+        // 1. 先执行上传
+        await this.uploadAll()
+        // 2. 上传完成后查询图片数据
+        await this.search()
+      } catch (error) {
+        console.error('上传或加载失败:', error)
+        this.$message.error('图片加载失败')
+      }
+    },
+    
+    // 调用上传接口
+    uploadAll() {
+      return new Promise((resolve, reject) => {
+        request.get("/uploadAll")
+          .then(res => {
+            if (res.code === '0') {
+              this.$message.success(res.msg || '上传成功')
+              resolve(res)
+            } else {
+              this.$message.error(res.msg || '上传失败')
+              reject(res)
+            }
+          })
+          .catch(error => {
+            this.$message.error('上传请求失败')
+            reject(error)
+          })
+      })
+    },
+    
+    // 查询图片数据
     search() {
-      request.get("/Image/userid", { 
-        params: { 
-          userid: this.params.userid 
-        } 
-      }).then(res => {
-        if (res.code === '0') {
-          this.tableData = res.data || []
-        } else {
-          this.$message.error(res.msg)
-        }
+      return new Promise((resolve, reject) => {
+        request.get("/Image/userid", { 
+          params: { 
+            userid: this.params.userid 
+          } 
+        }).then(res => {
+          if (res.code === '0') {
+            this.tableData = res.data || []
+            resolve(res)
+          } else {
+            this.$message.error(res.msg)
+            reject(res)
+          }
+        }).catch(error => {
+          this.$message.error('获取图片失败')
+          reject(error)
+        })
       })
     },
   },
@@ -71,6 +111,7 @@ export default {
 </script>
 
 <style scoped>
+/* 样式保持不变 */
 .image-gallery {
   padding: 20px;
 }
