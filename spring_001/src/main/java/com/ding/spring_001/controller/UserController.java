@@ -16,20 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 //告诉SpringBoot当前类是一个控制器，可以接收前端请求。交给Spring容器管理
-@CrossOrigin//该注解解决跨域问题
-@RestController//默认返回时会经过视图解析器
+@CrossOrigin // 该注解解决跨域问题
+@RestController // 默认返回时会经过视图解析器
 @RequestMapping("/user")
 public class UserController {
-    //我现在是不是需要去业务层处理逻辑 可能要计算等问题的逻辑
+    // 我现在是不是需要去业务层处理逻辑 可能要计算等问题的逻辑
     @Autowired
     UserService userService;
 
-
     /* 用户登录 */
     @PostMapping("/login")
-    public Result login(@RequestBody User user){
+    public Result login(@RequestBody User user) {
         User dataSourceUser = userService.selectByUserNameAndPass(user);
-        if(dataSourceUser == null) {
+        if (dataSourceUser == null) {
             return Result.error("请输入正确的用户名或密码");
         }
         return Result.success(dataSourceUser);
@@ -42,6 +41,13 @@ public class UserController {
         return Result.success(users);
     }
 
+    /* 返回用户总数 */
+    @GetMapping("/count")
+    public Result count() {
+        int total = userService.countUsers();
+        return Result.success(total);
+    }
+
     /* 根据用户名和电话查询用户信息 */
     @GetMapping("/selectByUserNameAndPhone")
     public Result selectByUserNameAndPhone(User user) {
@@ -49,7 +55,7 @@ public class UserController {
         return Result.success(list);
     }
 
-    /*添加用户信息 */
+    /* 添加用户信息 */
     @PostMapping("/add")
     public Result add(@RequestBody User user) {
         int i = userService.add(user);
@@ -58,7 +64,7 @@ public class UserController {
         return Result.error("添加失败");
     }
 
-    /*单独删除 */
+    /* 单独删除 */
     @DeleteMapping("/del/{id}")
     public Result del(@PathVariable Integer id) {
         Integer i = userService.del(id);
@@ -67,7 +73,7 @@ public class UserController {
         return Result.success();
     }
 
-    /*批量删除 */
+    /* 批量删除 */
     @DeleteMapping("/dels/{ids}")
     public Result deleteBatch(@PathVariable int[] ids) {
         int i = userService.deleteBatch(ids);
@@ -76,7 +82,7 @@ public class UserController {
         return Result.error("批量删除失败");
     }
 
-    /*修改用户信息 */
+    /* 修改用户信息 */
     @PostMapping("/update")
     public Result update(@RequestBody User user) {
         System.out.println(user);
