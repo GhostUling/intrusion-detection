@@ -212,7 +212,8 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
-        center: true
+        center: true,
+        customClass: 'custom-upload-dialog'  // 添加自定义类名
       }).then(() => {
         request.delete('/user/del/'+id).then(res=>{
           if(res.code=='0'){
